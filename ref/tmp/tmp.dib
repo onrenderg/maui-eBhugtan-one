@@ -1,0 +1,355 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+#r "nuget: sqlite-net-pcl"
+
+#!csharp
+
+using System.Net.Http;
+using Newtonsoft.Json.Linq; // This line fixes the 'JObject' error
+using Newtonsoft.Json;      // This helps with general serialization
+using SQLite;
+using System.IO;
+class HitServices
+{
+
+    string FinYear = "2024";
+    string AccNumber = "55154989442";
+    
+    public  async Task<string> GetRawJson()
+    {
+        var client = new HttpClient();
+        var url = $"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={FinYear}&bankAccNo={AccNumber}";
+        var res = await client.GetAsync(url);
+        var rawJson = await res.Content.ReadAsStringAsync();
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            // Console.WriteLine(rawJson);  
+            return rawJson;
+        }
+        else 
+        {
+            return "";
+        }
+        
+    }
+
+}
+
+var hitServices = new HitServices();
+string rawJson = await hitServices.GetRawJson();
+// Console.WriteLine(rawJson);
+
+
+
+JObject jObject = JObject.Parse(rawJson);
+Console.WriteLine(jObject);
+
+
+public class Payments
+{
+    // These names must match your JSON keys exactly
+    public string BillID { get; set; }
+    public string BillType { get; set; }
+    public string DDOCode { get; set; }
+    public decimal NetAmount { get; set; } // We can use decimal for money!
+    public string PaidOn { get; set; }
+    public string PayeeCode { get; set; }
+    public string Remarks { get; set; }
+    public string Treasury { get; set; }
+}
+
+
+
+foreach (var i in jObject["otherPayments"]) 
+{
+    Console.WriteLine($"BillID: {i["BillID"]}");
+    Console.WriteLine($"BillType: {i["BillType"]}");
+    Console.WriteLine($"DDOCode: {i["DDOCode"]}");
+    Console.WriteLine($"NetAmount: {i["NetAmount"]}");
+    Console.WriteLine($"PaidOn: {i["PaidOn"]}");
+    Console.WriteLine($"PayeeCode: {i["PayeeCode"]}");
+    Console.WriteLine($"Remarks: {i["Remarks"]}");
+    Console.WriteLine($"Treasury: {i["Treasury"]}");
+    Console.WriteLine("\n");
+}
+
+#!csharp
+
+public class PaymentsDatabase
+
+{
+    public static string  Dbname = "payments.db";
+
+    private SQLiteConnection _conn;
+
+    public PaymentsDatabase()
+    {
+        var dbPath = Path.Combine(Environment.CurrentDirectory, Dbname);
+        _conn = new SQLiteConnection(dbPath);
+        _conn.CreateTable<Payments>();
+    }
+
+
+    // Read all payments from the database
+    public IEnumerable<Payments> GetPayments()
+    {
+        var list = _conn.Query<Payments>("SELECT * FROM Payments");
+        return list.ToList();
+    }
+
+    
+}
+
+PaymentsDatabase database_Payments = new PaymentsDatabase();
+
+Console.WriteLine(database_Payments.GetPayments().Count());
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+#r "nuget: sqlite-net-pcl"
+
+#!csharp
+
+using System.Net.Http;
+using Newtonsoft.Json.Linq; // This line fixes the 'JObject' error
+using Newtonsoft.Json;      // This helps with general serialization
+using SQLite;
+using System.IO;
+class HitServices
+{
+
+    string FinYear = "2024";
+    string AccNumber = "55154989442";
+    
+    public  async Task<string> GetRawJson()
+    {
+        var client = new HttpClient();
+        var url = $"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={FinYear}&bankAccNo={AccNumber}";
+        var res = await client.GetAsync(url);
+        var rawJson = await res.Content.ReadAsStringAsync();
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            // Console.WriteLine(rawJson);  
+            return rawJson;
+        }
+        else 
+        {
+            return "";
+        }
+        
+    }
+
+}
+
+var hitServices = new HitServices();
+string rawJson = await hitServices.GetRawJson();
+// Console.WriteLine(rawJson);
+
+
+
+JObject jObject = JObject.Parse(rawJson);
+// Console.WriteLine(jObject);
+
+
+public class Payments
+{
+    // These names must match your JSON keys exactly
+    [PrimaryKey]
+    public string BillID { get; set; }
+    public string BillType { get; set; }
+    public string DDOCode { get; set; }
+    public decimal NetAmount { get; set; } 
+    public string PaidOn { get; set; }
+    public string PayeeCode { get; set; }
+    public string Remarks { get; set; }
+    public string Treasury { get; set; }
+}
+
+
+
+
+public class PaymentsDatabase
+
+{
+    public static string  Dbname = "payments.db";
+
+    private SQLiteConnection _conn;
+
+    public PaymentsDatabase()
+    {
+        var dbPath = Path.Combine(Environment.CurrentDirectory, Dbname);
+        _conn = new SQLiteConnection(dbPath);
+        _conn.CreateTable<Payments>();
+    }
+
+
+    public void SavePayments(List<Payments> items)
+    {
+        // InsertAll is efficient for bulk data
+        _conn.InsertAll(items); 
+    }
+
+    // Read all payments from the database
+    public IEnumerable<Payments> ReadQ()
+    {
+        var list = _conn.Query<Payments>("SELECT * FROM Payments");
+        return list.ToList();
+    }
+
+
+    // Read all payments from the database
+    public Payments Xustom(string query)
+    {
+        var result = _conn.Query<Payments>(query);
+        // Return the actual data object (or null if the table is empty)
+        return result.FirstOrDefault();
+    }
+    
+}
+
+
+
+var paymentList = new List<Payments>();
+
+foreach (var i in jObject["otherPayments"]) 
+{
+    var item = new Payments();
+    item.BillID = i["BillID"].ToString();
+    item.BillType = i["BillType"].ToString();
+    item.DDOCode = i["DDOCode"].ToString();
+    item.NetAmount = decimal.Parse(i["NetAmount"].ToString());
+    item.PaidOn = i["PaidOn"].ToString();
+    item.PayeeCode = i["PayeeCode"].ToString();
+    item.Remarks = i["Remarks"].ToString();
+    item.Treasury = i["Treasury"].ToString();
+
+    paymentList.Add(item);
+
+}
+
+PaymentsDatabase database_Payments = new PaymentsDatabase();
+database_Payments.SavePayments(paymentList);
+
+
+// PaymentsDatabase database_Payments = new PaymentsDatabase();
+
+Console.WriteLine(database_Payments.Xustom("SELECT * FROM Payments LIMIT 1"));
+
+#!csharp
+
+using System.Net.Http;
+using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json;      
+using SQLite;
+using System.IO;
+using System.Linq;
+
+class HitServices
+{
+    string FinYear = "2024";
+    string AccNumber = "55154989442";
+    
+    public async Task<string> GetRawJson()
+    {
+        var client = new HttpClient();
+        var url = $"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={FinYear}&bankAccNo={AccNumber}";
+        var res = await client.GetAsync(url);
+        return await res.Content.ReadAsStringAsync();
+    }
+}
+
+public class Payments
+{
+    [PrimaryKey] // Added this so InsertOrReplace knows what to look for
+    public string BillID { get; set; }
+    public string BillType { get; set; }
+    public string DDOCode { get; set; }
+    public decimal NetAmount { get; set; } 
+    public string PaidOn { get; set; }
+    public string PayeeCode { get; set; }
+    public string Remarks { get; set; }
+    public string Treasury { get; set; }
+}
+
+public class PaymentsDatabase
+{
+    public static string Dbname = "payments.db";
+    private SQLiteConnection _conn;
+
+    public PaymentsDatabase()
+    {
+        var dbPath = Path.Combine(Environment.CurrentDirectory, Dbname);
+        _conn = new SQLiteConnection(dbPath);
+        _conn.CreateTable<Payments>();
+    }
+
+    public void AddPayments(Payments model)
+    {
+        // Use InsertOrReplace so it doesn't crash on duplicates
+        _conn.InsertOrReplace(model);
+    }
+
+    public Payments Xustom(string query)
+    {
+        var result = _conn.Query<Payments>(query);
+        return result.FirstOrDefault();
+    }
+}
+
+// --- EXECUTION ---
+
+var hitServices = new HitServices();
+string rawJson = await hitServices.GetRawJson();
+
+JObject jObject = JObject.Parse(rawJson);
+
+// Declare ONCE
+PaymentsDatabase database_Payments = new PaymentsDatabase();
+
+// Check if otherPayments exists to avoid null errors
+if (jObject["otherPayments"] != null)
+{
+    foreach (var i in jObject["otherPayments"]) 
+    {
+        var item = new Payments();
+        item.BillID = i["BillID"]?.ToString() ?? "N/A";
+        item.BillType = i["BillType"]?.ToString() ?? "Unknown";
+        item.DDOCode = i["DDOCode"]?.ToString() ?? "";
+        
+        decimal.TryParse(i["NetAmount"]?.ToString(), out decimal netAmt);
+        item.NetAmount = netAmt;
+
+        item.PaidOn = i["PaidOn"]?.ToString() ?? "";
+        item.PayeeCode = i["PayeeCode"]?.ToString() ?? "";
+        item.Remarks = i["Remarks"]?.ToString() ?? "";
+        item.Treasury = i["Treasury"]?.ToString() ?? "";
+
+        database_Payments.AddPayments(item);
+    }
+}
+
+// Do NOT re-declare database_Payments here. Just use it.
+Payments myRecord = database_Payments.Xustom("SELECT * FROM Payments LIMIT 1");
+
+if (myRecord != null)
+{
+    Console.WriteLine("Successfully retrieved first record from Database:");
+    Console.WriteLine($"Bill ID: {myRecord.BillID}");
+    Console.WriteLine($"Amount:  {myRecord.NetAmount}");
+    Console.WriteLine($"Remarks: {myRecord.Remarks}");
+}
+else
+{
+    Console.WriteLine("No records found in database.");
+}
+
+#!csharp
+
+// var data = JsonSerializer.Deserialize<Payments>(rawJson);
+// Console.WriteLine(data.BillID); // Now you can access properties!

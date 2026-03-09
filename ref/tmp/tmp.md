@@ -1,0 +1,1 @@
+del "C:\Users\parth-nic\AppData\Roaming\Code - Insiders\User\globalStorage\ms-dotnettools.dotnet-interactive-vscode\dotnet-tools.json"

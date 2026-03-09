@@ -384,3 +384,30 @@ del "C:\Users\parth-nic\AppData\Roaming\Code - Insiders\User\globalStorage\ms-do
   156:  * local-gitingest -exclude .log,.tmp,.bak -o my_repo.txt -size-limit -max-size 102400
   157  
 >C:\Program Files (x86)\Android\android-sdk\emulator\emulator.EXE -netfast -accel on -avd Pixel_9a -prop monodroid.avdname=Pixel_9a
+
+# antigravity 
+
+```bash
+cd
+rm -rf ~/.antigravity ~/.config/antigravity ~/.cache/antigravity ~/.local/share/antigravity
+ls -al
+rm -r .gemini/
+ls -al
+ls -al .local
+rm -r .cache
+rm -r .*
+ls
+ls -al
+clear rm -rf ~/.config/antigravity
+rm -rf ~/.config/antigravityrm -rf ~/.config/antigravity
+rm -rf ~/.config/antigravity
+clear
+rm -rf ~/.cache/antigravity
+rm -rf ~/.local/share/antigravity
+ls -la ~ | grep -i antigravity
+rm -rf ~/.antigravity
+antigravity
+history
+```
+
+Get-ChildItem -File | Rename-Item -NewName { $_.Name.ToLower() }
