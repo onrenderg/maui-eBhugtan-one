@@ -1,0 +1,30 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+#r "nuget: sqlite-net-pcl"
+
+#!csharp
+
+using SQLite;
+
+public class Department
+{
+    [PrimaryKey]
+    public string? DeptId { get; set; }
+    public string? DeptName { get; set; }
+    public bool IsChecked { get; set; }
+}
+List<Department> Departments = new List<Department>
+{
+    new Department { DeptId="3",  DeptName="Finance",   IsChecked=true  },
+    new Department { DeptId="5",  DeptName="Personnel", IsChecked=false },
+    new Department { DeptId="12", DeptName="Education", IsChecked=true  }
+};
+var selectedDepts = Departments
+    .Where(d => d.IsChecked)       // .filter()
+    .Select(d => d.DeptId)         // .map()
+    .ToList();                     // makes it a List
+selectedDepts

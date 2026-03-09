@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="eBhugtanClient.MorePage"
+    Title="More">
+    <Grid RowDefinitions="Auto, *, Auto" Padding="20" RowSpacing="20" ColumnSpacing="20">
+        <Label Text="Account Management" FontSize="24" FontAttributes="Bold"
+            HorizontalOptions="Center" />
+
+        <!-- Account List -->
+        <ListView Grid.Row="1" x:Name="AccountsListView" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Border Margin="0,5" Padding="15" StrokeShape="RoundRectangle 10">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding AccountNumber}" FontSize="18"
+                                        FontAttributes="Bold" />
+                                    <Label Text="{Binding Fin_Year, StringFormat='Year: {0}'}"
+                                        TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1"
+                                    Text="Delete"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Clicked="DeleteBtn_Clicked"
+                                    CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Border>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Actions -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10">
+            <Button Text="Add New Account"
+                Clicked="AddAccount_Clicked"
+                BackgroundColor="Green"
+                TextColor="White" />
+            <Button Text="Sync All Payments"
+                Clicked="SyncAll_Clicked"
+                BackgroundColor="Orange"
+                TextColor="White" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

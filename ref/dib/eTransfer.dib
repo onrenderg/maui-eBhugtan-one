@@ -1,0 +1,35 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+
+class Program
+{
+    string access_value = "1CF88F38959D49C11493AD6FAEF204CA";
+    string access_key = "80B7B95DC8CF961A1864328C59C7A33F";
+    string deptid = "HPD0009";
+    string mode = "O";
+
+    public  async Task Main()
+    {
+        string url = $"https://genpmis.hp.nic.in/android/etransfer.aspx?access_value={access_value}&access_key={access_key}&deptid={deptid}&mode={mode}";
+
+
+        using (var client = new HttpClient())
+        {
+            var response = await client.GetAsync(url);
+            var data = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(data);
+        }
+    }
+
+}
+
+var program = new Program();
+await program.Main();

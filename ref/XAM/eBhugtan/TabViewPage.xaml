@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="eBhugtan.TabViewPage" xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    android:TabbedPage.ToolbarPlacement="Bottom">
+    <ContentPage.ToolbarItems> 
+        <ToolbarItem Icon="Refreshico" x:Name="syncbtn" Clicked="SyncNow" />
+    </ContentPage.ToolbarItems>
+    <NavigationPage.TitleView >
+        <StackLayout x:Name="Custom_Navigation" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" >
+            <Image Source="Hpgov.png" VerticalOptions="CenterAndExpand"/>
+            <Label Text="e-भुगतान ,HP" TextColor="#05083B" FontSize="19" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Center"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+</TabbedPage>

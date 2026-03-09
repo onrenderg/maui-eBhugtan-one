@@ -1,0 +1,44 @@
+# Manage Department List & Consolidated Refresh
+
+Change "Reset Department List" to "Manage Department List" that preserves checkbox state, and consolidate TransfersPage refresh UI into a single bottom section.
+
+## Proposed Changes
+
+### MorePage
+
+#### [MODIFY] [MorePage.xaml](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MorePage.xaml)
+- Change text from "Reset Department List" → "Manage Department List"
+- Change icon from 🔄 → ⚙️
+
+#### [MODIFY] [MorePage.xaml.cs](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MorePage.xaml.cs)
+- Replace [btn_reset_Clicked](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MorePage.xaml.cs#61-70): remove confirmation dialog and database deletion. Instead, navigate directly to [MainPage(preserveSelection: true)](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MainPage.xaml.cs#5-181) to keep checked departments.
+
+---
+
+### MainPage
+
+#### [MODIFY] [MainPage.xaml.cs](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MainPage.xaml.cs)
+- Add `bool preserveSelection` constructor parameter (default `false`).
+- In [LoadDepartments()](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/MainPage.xaml.cs#18-65): skip the `IsChecked = false` reset loop and `SelectAllCheckBox.IsChecked = false` when `preserveSelection` is `true`. The `Department.IsChecked` values are already persisted in SQLite, so they'll load with their saved state.
+
+---
+
+### TransfersPage
+
+#### [MODIFY] [TransfersPage.xaml](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/TransfersPage.xaml)
+- Remove individual refresh icon (`Image` with [OnGroupRefreshTapped](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/TransfersPage.xaml.cs#137-181)) from the group header template (Grid column 3).
+- Remove per-group "Last Updated" label from the group header template.
+- Add a "Last Updated" label and refresh button in **Grid.Row="4"** (before bottom nav), styled like the top header bar.
+
+#### [MODIFY] [TransfersPage.xaml.cs](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/TransfersPage.xaml.cs)
+- Remove the [OnGroupRefreshTapped](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/TransfersPage.xaml.cs#137-181) method entirely.
+- Add `LastUpdatedLabel` update logic in [LoadTransfers()](file:///c:/Users/parth-nic/Pictures/wsl/eTransfers/TransfersPage.xaml.cs#25-61) — compute the latest `RefreshDate` across all transfers and display it.
+
+## Verification Plan
+
+### Manual Verification
+1. Build with `dotnet build` to ensure no compile errors.
+2. Deploy to device/emulator and verify:
+   - **MorePage**: "Manage Department List" appears; tapping it goes to MainPage with previously checked departments still checked.
+   - **MainPage**: User can change selections and tap "View Transfer Orders" to see updated list.
+   - **TransfersPage**: No per-group refresh icons; single "Last Updated" + refresh button visible at bottom before nav bar.

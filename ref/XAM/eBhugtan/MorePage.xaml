@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="eBhugtan.MorePage" xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" Title="More" IconImageSource="More">
+    <ContentPage.Content>
+        <Grid>
+        <ScrollView>
+            <StackLayout>
+                <StackLayout Margin="9">
+                    <Label Text="eBhugtan - HP Government" TextColor="Black" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    <Frame CornerRadius="75" Padding="0" Margin="8" WidthRequest="150" HeightRequest="150" HorizontalOptions="Center" VerticalOptions="Start" BorderColor="DeepSkyBlue">
+                        <Image Source="Bhugtan_ico" Margin="1"/>
+                    </Frame>
+                    <Label Text="Powered by" TextColor="Black" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="National Informatics Centre - HP" TextColor="Black" FontSize="Default" HorizontalOptions="Center" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                    <Frame Padding="0" HasShadow = "False" Margin="20,8,20,0" CornerRadius="20" BackgroundColor="DeepSkyBlue">
+                        <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand"  >
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="AddRemoveBtn"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="Add_remove_ico" HeightRequest="40" Margin="9" HorizontalOptions="End"/>
+                        <Label Text="Add/Remove Account" HorizontalOptions="CenterAndExpand" TextColor="White" VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold" Margin="5"/>
+                    </StackLayout>
+                    </Frame>
+                </StackLayout>
+                <BoxView BackgroundColor="#f2f2f7" HeightRequest="2" Margin="0,0,0,0"/>
+                <StackLayout Margin="10,3,10,2" IsVisible="false">
+                    
+                    <StackLayout BackgroundColor="#f2f2f7" Padding="6">
+                        <Label Text="Contact Developer" FontAttributes="Bold" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  VerticalTextAlignment="Center"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="5,0,0,0" Padding="6">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="NIC_Call"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="CallIco" HeightRequest="20"/>
+                        <Label Text="Call Us" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        <Label Text=">" HorizontalOptions="End"/>
+                    </StackLayout>
+                    <BoxView BackgroundColor="#f2f2f7" HeightRequest="1" Margin="26,0,0,0"/>
+                    <StackLayout Orientation="Horizontal" Margin="5,0,0,0" Padding="6">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="NIC_Website"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="WebsiteIco" HeightRequest="20"/>
+                        <Label Text="Our Website" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        <Label Text=">" HorizontalOptions="End"/>
+                    </StackLayout>
+                    <BoxView BackgroundColor="#f2f2f7" HeightRequest="1" Margin="26,0,0,0"/>
+                    <StackLayout Padding="6">
+                        <Label Text="&#x2709; group1-hp[at]nic[dot]in" TextColor="Black"  Margin="5,0,0,0"/>
+                    <BoxView BackgroundColor="#f2f2f7" HeightRequest="2" Margin="0,0,0,0"/>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout VerticalOptions="EndAndExpand">
+                    <StackLayout Orientation="Horizontal" BackgroundColor="DeepSkyBlue" HorizontalOptions="FillAndExpand"  >
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OurAppsBtn"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="Otherapps" HeightRequest="30" Margin="9" HorizontalOptions="End"/>
+                        <Label Text="Our Other Apps" HorizontalOptions="CenterAndExpand" TextColor="White" VerticalTextAlignment="Center" FontSize="Default" FontAttributes="Bold"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    <ContentView x:Name="popupDetails" BackgroundColor="#C0808080" Padding="20" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" >
+        <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Frame BorderColor="#BB2027" Padding="2">
+                <StackLayout Orientation="Vertical" BackgroundColor="White" Spacing="8" Padding="6">
+                    <Label x:Name="TitleOfContent"  HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#A11312" FontSize="Medium"/>
+                    <BoxView BackgroundColor="#BB2027" HeightRequest="2" Margin="0,0,0,10"/>
+                    <ListView x:Name="Content_DetailedList" HasUnevenRows="True" SeparatorColor="Silver" SelectionMode="None" VerticalOptions="FillAndExpand"  BackgroundColor="Transparent" HeightRequest="250">
+                        <ListView.ItemTemplate >
+                          <DataTemplate>
+                            <ViewCell>
+                                    <StackLayout Margin="5">
+                                        <Grid Padding="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Text="{Binding AccountNumber}" Grid.Column="0" TextColor="Black" FontSize="Large" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Grid x:Name="Grid_Add_Account" IsVisible="false">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Entry x:Name="AcNo" Placeholder="Enter Account Number" IsTextPredictionEnabled="False" Grid.Row="0"/>
+                        <Entry x:Name="Username" Placeholder="First 3 Letters of Name" IsPassword="False" IsTextPredictionEnabled="False" MaxLength="3" Grid.Row="1"/>
+                        <Picker x:Name="Picker_FinYear" Title="Choose Financial year" HorizontalOptions="Start" Grid.Row="2"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Button BackgroundColor="#FF4956" Grid.Column="0" TextColor="White" Clicked="Close_Btn" Text="Close"/>
+                        <Button BackgroundColor="#FF4956" Grid.Column="1" TextColor="White" Clicked="Submit_Btn" Text="Add Account" x:Name="Lbl_Add_new"/>
+                    </Grid>
+            </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentView>
+        <RelativeLayout x:Name="activity1" IsVisible="false"  Opacity="0.9" BackgroundColor="Transparent"> 
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-100, Factor=0.5}"  RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.4}"> 
+                <Frame BackgroundColor="#f2f2f2">
+                <StackLayout Orientation="Horizontal" Margin="6" >
+                <ActivityIndicator IsVisible="true" IsRunning="true" Margin="5"/> 
+                <Label Text="Please Wait ..." TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                </Frame>
+            </StackLayout>
+        </RelativeLayout>
+    </Grid>
+    </ContentPage.Content>
+</ContentPage>

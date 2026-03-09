@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="eBhugtan.DDOWisePage" xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" Title="DDO_Wise" IconImageSource="Ddo_ico">
+    <Grid>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" Padding="5">
+                <Label Text="A/C No." TextColor="Black" VerticalTextAlignment="Center"/>
+                <Picker x:Name="Picker_Account" TitleColor="Black" Title="Account" HorizontalOptions="FillAndExpand"/>
+                <Label Text="Year" TextColor="Black" VerticalTextAlignment="Center"/>
+                <Picker x:Name="Picker_fYear" TitleColor="Black" HorizontalOptions="Fill" Title="Fin-Year"/>
+            </StackLayout>
+            
+            <Grid BackgroundColor="#f2f2f7" Padding="5" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Text="DDO Name" Grid.Column="0" FontAttributes="Bold" TextColor="#A11312"/>
+                <Label Text="Net Amount" Grid.Column="1" HorizontalTextAlignment="End" FontAttributes="Bold" TextColor="#A11312"/>
+            </Grid>
+            <Label x:Name="Lbl_NoPayment" IsVisible="false" Text="No Payments Received In Selected Financial Year" TextColor="#A11312" FontAttributes="Bold" FontSize="Large" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"/>
+            <ListView x:Name="DetailedList" HasUnevenRows="True" SeparatorColor="Silver" SelectionMode="None" VerticalOptions="FillAndExpand"  BackgroundColor="Transparent">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                        <StackLayout Margin="5">
+                            <Grid  Padding="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding FreeCell1}" Grid.Column="0" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium" />
+                                <Label Text="{Binding FreeCell2}" Grid.Column="1" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End"  FontSize="Medium" />
+                            </Grid>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+            <BoxView BackgroundColor="#A11312" HeightRequest="2"/>
+                <Label x:Name="Total_Line" FontSize="Medium" HorizontalOptions="CenterAndExpand" TextColor="Black"/>
+            <BoxView BackgroundColor="#A11312" HeightRequest="2"/>
+                <Label x:Name="Refresh_Line" FontSize="Medium" HorizontalOptions="CenterAndExpand" TextColor="Black"/>
+        </StackLayout>
+        <ContentView x:Name="popupDetails" BackgroundColor="#C0808080" Padding="20, 20" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+        <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Frame BorderColor="#BB2027" Padding="2">
+                <StackLayout>
+                    <Label x:Name="TitleofContent" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#A11312" FontSize="Medium"/>
+                    <ListView x:Name="Content_DetailedList" HasUnevenRows="True" SeparatorColor="Transparent" SelectionMode="None" VerticalOptions="FillAndExpand"  BackgroundColor="Transparent" Margin="4" MinimumHeightRequest="100">
+                        <ListView.ItemTemplate >
+                            <DataTemplate>
+                                <ViewCell >
+                                        <Frame Padding="3" Margin="3,10,3,10">
+                                            <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="Bill ID" Grid.Column="0" Grid.Row="0" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding BillID}" Grid.Column="1" Grid.Row="0" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                        <Label Text="Bill Type" Grid.Column="0" Grid.Row="1" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding BillType}" Grid.Column="1" Grid.Row="1" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                        <Label Text="Paid On" Grid.Column="0" Grid.Row="2" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding PaidOn}" Grid.Column="1" Grid.Row="2" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                        <Label Text="Gross Amount" Grid.Column="0" Grid.Row="3" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding GrossAmount}" Grid.Column="1" Grid.Row="3" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                        <Label Text="Net Amount" Grid.Column="0" Grid.Row="4" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding NetAmount}" Grid.Column="1" Grid.Row="4" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                        <Label Text="Remarks" Grid.Column="0" Grid.Row="5" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"  FontSize="Medium"/>
+                                        <Label Text="{Binding Remarks}" Grid.Column="1" Grid.Row="5" TextColor="Black" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="End" FontSize="Medium" />
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    </ListView>
+                <Button BackgroundColor="#FF4956" TextColor="White" Clicked="Close_Btn" Text="Close"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentView>
+        <RelativeLayout x:Name="activity1" IsVisible="false"  Opacity="0.9" BackgroundColor="Transparent"> 
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-100, Factor=0.5}"  RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.4}"> 
+                <Frame BackgroundColor="#f2f2f2">
+                <StackLayout Orientation="Horizontal" Margin="6" >
+                <ActivityIndicator IsVisible="true" IsRunning="true" Margin="5"/> 
+                <Label Text="Please Wait ..." TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                </Frame>
+            </StackLayout>
+        </RelativeLayout>
+    </Grid>
+    
+</ContentPage>

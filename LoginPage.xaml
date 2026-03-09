@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="eBhugtan.LoginPage"
+        xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+        xmlns:views="clr-namespace:eBhugtan">
+        <NavigationPage.TitleView>
+                <views:NavTitleView />
+        </NavigationPage.TitleView>
+
+        <Grid RowDefinitions="*,Auto" BackgroundColor="White">
+
+                <!-- Row 0: Scrollable content -->
+                <ScrollView Grid.Row="0">
+                        <VerticalStackLayout Margin="12" Spacing="10">
+                                <Border StrokeShape="RoundRectangle 75"
+                                        StrokeThickness="2"
+                                        Stroke="DeepSkyBlue"
+                                        Padding="0"
+                                        Margin="0,0,0,20"
+                                        WidthRequest="130"
+                                        HeightRequest="130"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Start">
+                                        <Image Source="bhugtan_ico"
+                                                Margin="1" />
+                                </Border>
+
+                                <!-- Account Number Card -->
+                                <Label Text="Account Number"
+                                        TextColor="DeepSkyBlue"
+                                        FontAttributes="Bold"
+                                        FontSize="Small"
+                                        Margin="12,0" />
+                                <Border Margin="8,0,8,12"
+                                        Padding="12,4"
+                                        StrokeShape="RoundRectangle 10"
+                                        Stroke="#E0E0E0"
+                                        Background="White">
+                                        <Entry x:Name="AcNo"
+                                                Placeholder="Enter Account Number"
+                                                IsTextPredictionEnabled="False"
+                                                TextColor="Black" />
+                                </Border>
+
+
+                                <!-- Financial Year Card -->
+                                <Label Text="Financial Year"
+                                        TextColor="DeepSkyBlue"
+                                        FontAttributes="Bold"
+                                        FontSize="Small"
+                                        Margin="12,0" />
+                                <Border Margin="8,0,8,12"
+                                        Padding="12,4"
+                                        StrokeShape="RoundRectangle 10"
+                                        Stroke="#E0E0E0"
+                                        Background="White">
+                                        <Picker x:Name="Picker_FinYear"
+                                                Title="Choose Financial year"
+                                                TitleColor="Gray"
+                                                TextColor="Black"
+                                                HorizontalOptions="Fill" />
+                                </Border>
+
+                                <!-- Submit Button Card -->
+                                <Border Margin="10,20,10,0"
+                                        Padding="0"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Background="DeepSkyBlue"
+                                        HeightRequest="55">
+                                        <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="LoginBtn"
+                                                        NumberOfTapsRequired="1" />
+                                        </Border.GestureRecognizers>
+                                        <Grid ColumnDefinitions="Auto,*" Padding="20,0">
+                                                <Image Grid.Column="0"
+                                                        Source="signin"
+                                                        HeightRequest="24"
+                                                        VerticalOptions="Center" />
+                                                <Label Grid.Column="1"
+                                                        Text="SUBMIT"
+                                                        TextColor="White"
+                                                        VerticalTextAlignment="Center"
+                                                        HorizontalTextAlignment="Center"
+                                                        FontSize="18"
+                                                        FontAttributes="Bold"
+                                                        Margin="-24,0,0,0" /> <!-- Adjusting for icon
+                                                offset -->
+                                        </Grid>
+                                </Border>
+
+                        </VerticalStackLayout>
+                </ScrollView>
+
+                <!-- Row 1: Footer label -->
+                <Label Grid.Row="1"
+                        Text="© National Informatics Centre, Himachal Pradesh. Centre of Competence for Mobile Application Development"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource Primary}"
+                        HorizontalTextAlignment="Center" />
+
+                <!-- Overlay: spans all rows -->
+                <AbsoluteLayout x:Name="activity1"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        IsVisible="false"
+                        Opacity="0.9"
+                        BackgroundColor="Transparent"
+                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        AbsoluteLayout.LayoutFlags="All">
+                        <Border BackgroundColor="#f2f2f2"
+                                StrokeThickness="0"
+                                AbsoluteLayout.LayoutBounds="0.5,0.4,200,60"
+                                AbsoluteLayout.LayoutFlags="PositionProportional">
+                                <StackLayout Orientation="Horizontal"
+                                        Margin="6">
+                                        <ActivityIndicator IsVisible="true"
+                                                IsRunning="true"
+                                                Margin="5" />
+                                        <Label Text="Please Wait ..."
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                VerticalTextAlignment="Center" />
+                                </StackLayout>
+                        </Border>
+                </AbsoluteLayout>
+        </Grid>
+</ContentPage>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="eBhugtanClient.DDOWisePage"
+    Title="DDO Wise">
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Margin="10" Padding="10" StrokeShape="RoundRectangle 10"
+            BackgroundColor="GhostWhite">
+            <Label Text="Summary by Office (DDO)" FontAttributes="Bold" HorizontalOptions="Center" />
+        </Border>
+
+        <ListView Grid.Row="1" x:Name="DDOListView" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Border Margin="10,5" Padding="15" StrokeShape="RoundRectangle 5">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding DDOCode}" FontAttributes="Bold" />
+                                <Label Text="{Binding NetAmount, StringFormat='Total: ₹ {0}'}"
+                                    TextColor="DarkBlue" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="eBhugtan.DDOWisePage"
+        xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+        Title="DDO_Wise"
+        IconImageSource="ddo_ico">
+
+        <!-- Main layout: Auto rows for header/labels, * for ListView, overlays span all -->
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto,Auto" BackgroundColor="White">
+
+                <!-- Row 0: Account picker (label + picker side by side) -->
+                <Border Grid.Row="0"
+                        Margin="8,8,8,2"
+                        Padding="12,4"
+                        StrokeShape="RoundRectangle 10"
+                        Stroke="#E0E0E0"
+                        Background="White">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
+                                <Label Grid.Column="0"
+                                        Text="A/C No."
+                                        TextColor="DeepSkyBlue"
+                                        FontAttributes="Bold"
+                                        FontSize="Small"
+                                        VerticalOptions="Center" />
+                                <Picker Grid.Column="1"
+                                        x:Name="Picker_Account"
+                                        TitleColor="Gray"
+                                        TextColor="Black"
+                                        Title="Account"
+                                        HorizontalOptions="Fill" />
+                                <Label Grid.Column="2"
+                                        Text="›"
+                                        FontSize="22"
+                                        TextColor="DeepSkyBlue"
+                                        VerticalOptions="Center" />
+                        </Grid>
+                </Border>
+
+                <!-- Row 1: Year picker (label + picker side by side) -->
+                <Border Grid.Row="1"
+                        Margin="8,2,8,4"
+                        Padding="12,4"
+                        StrokeShape="RoundRectangle 10"
+                        Stroke="#E0E0E0"
+                        Background="White">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
+                                <Label Grid.Column="0"
+                                        Text="Year"
+                                        TextColor="DeepSkyBlue"
+                                        FontAttributes="Bold"
+                                        FontSize="Small"
+                                        VerticalOptions="Center" />
+                                <Picker Grid.Column="1"
+                                        x:Name="Picker_fYear"
+                                        TitleColor="Gray"
+                                        TextColor="Black"
+                                        HorizontalOptions="Fill"
+                                        Title="Fin-Year" />
+                                <Label Grid.Column="2"
+                                        Text="›"
+                                        FontSize="22"
+                                        TextColor="DeepSkyBlue"
+                                        VerticalOptions="Center" />
+                        </Grid>
+                </Border>
+
+                <!-- Row 2: Column headers -->
+                <Grid Grid.Row="2"
+                        ColumnDefinitions="*,Auto"
+                        BackgroundColor="DeepSkyBlue"
+                        Padding="10,6"
+                        Margin="8,0,8,4">
+                        <Label Grid.Column="0"
+                                Text="DDO Name"
+                                FontAttributes="Bold"
+                                TextColor="White" />
+                        <Label Grid.Column="1"
+                                Text="Net Amount"
+                                HorizontalTextAlignment="End"
+                                FontAttributes="Bold"
+                                TextColor="White" />
+                </Grid>
+
+                <!-- Row 3: No-payment message -->
+                <Label Grid.Row="3"
+                        x:Name="Lbl_NoPayment"
+                        IsVisible="false"
+                        Text="No Payments Received In Selected Financial Year"
+                        TextColor="#A11312"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="Fill"
+                        HorizontalTextAlignment="Center" />
+
+                <!-- Row 4: Main list (fills remaining space) -->
+                <ListView Grid.Row="4"
+                        x:Name="DetailedList"
+                        HasUnevenRows="True"
+                        SeparatorColor="Transparent"
+                        SelectionMode="None"
+                        VerticalOptions="Fill"
+                        BackgroundColor="Transparent">
+                        <ListView.ItemTemplate>
+                                <DataTemplate>
+                                        <ViewCell>
+                                                <Border Margin="8,4"
+                                                        Padding="12,10"
+                                                        StrokeShape="RoundRectangle 10"
+                                                        Stroke="#E0E0E0"
+                                                        Background="White">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto"
+                                                                RowDefinitions="Auto">
+                                                                <Label Grid.Column="0"
+                                                                        Text="{Binding FreeCell1}"
+                                                                        TextColor="Black"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalTextAlignment="Center"
+                                                                        FontSize="Medium" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="{Binding FreeCell2}"
+                                                                        TextColor="DeepSkyBlue"
+                                                                        FontAttributes="Bold"
+                                                                        HorizontalTextAlignment="End"
+                                                                        VerticalTextAlignment="Center"
+                                                                        FontSize="Medium" />
+                                                                <Label Grid.Column="2"
+                                                                        Text=" ›"
+                                                                        FontSize="22"
+                                                                        TextColor="DeepSkyBlue"
+                                                                        VerticalTextAlignment="Center" />
+                                                        </Grid>
+                                                </Border>
+                                        </ViewCell>
+                                </DataTemplate>
+                        </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- Row 5: DeepSkyBlue separator -->
+                <BoxView Grid.Row="5"
+                        BackgroundColor="DeepSkyBlue"
+                        HeightRequest="1"
+                        Margin="8,0" />
+
+                <!-- Row 6: Total line -->
+                <Label Grid.Row="6"
+                        x:Name="Total_Line"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        TextColor="MidnightBlue" />
+
+                <!-- Row 7: Separator -->
+                <BoxView Grid.Row="7"
+                        BackgroundColor="#E0E0E0"
+                        HeightRequest="1"
+                        Margin="8,0" />
+
+                <!-- Row 8: Refresh line -->
+                <Label Grid.Row="8"
+                        x:Name="Refresh_Line"
+                        FontSize="12"
+                        HorizontalOptions="Center"
+                        TextColor="Gray" />
+
+                <!-- Overlay: popup — spans all rows -->
+                <ContentView x:Name="popupDetails"
+                        Grid.Row="0"
+                        Grid.RowSpan="9"
+                        BackgroundColor="#C0808080"
+                        Padding="20"
+                        IsVisible="false">
+
+                        <Border Stroke="DeepSkyBlue"
+                                StrokeThickness="2"
+                                StrokeShape="RoundRectangle 16"
+                                Padding="12"
+                                BackgroundColor="White">
+                                <Grid RowDefinitions="Auto,*,Auto">
+                                        <Label Grid.Row="0"
+                                                x:Name="TitleofContent"
+                                                HorizontalOptions="Fill"
+                                                HorizontalTextAlignment="Center"
+                                                FontAttributes="Bold"
+                                                TextColor="DeepSkyBlue"
+                                                FontSize="Medium" />
+                                        <ListView Grid.Row="1"
+                                                x:Name="Content_DetailedList"
+                                                HasUnevenRows="True"
+                                                SeparatorColor="Transparent"
+                                                SelectionMode="None"
+                                                VerticalOptions="Fill"
+                                                BackgroundColor="Transparent"
+                                                Margin="4">
+                                                <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                                <ViewCell>
+                                                                        <Border Margin="4,6"
+                                                                                Padding="10"
+                                                                                StrokeShape="RoundRectangle 10"
+                                                                                Stroke="#E0E0E0"
+                                                                                Background="White">
+                                                                                <StackLayout
+                                                                                        Spacing="2">
+                                                                                        <Label
+                                                                                                Text="Bill ID"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding BillID}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium"
+                                                                                                Margin="0,0,0,4" />
+                                                                                        <Label
+                                                                                                Text="Bill Type"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding BillType}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium"
+                                                                                                Margin="0,0,0,4" />
+                                                                                        <Label
+                                                                                                Text="Paid On"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding PaidOn}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium"
+                                                                                                Margin="0,0,0,4" />
+                                                                                        <Label
+                                                                                                Text="Gross Amount"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding GrossAmount}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium"
+                                                                                                Margin="0,0,0,4" />
+                                                                                        <Label
+                                                                                                Text="Net Amount"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding NetAmount}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium"
+                                                                                                Margin="0,0,0,4" />
+                                                                                        <Label
+                                                                                                Text="Remarks"
+                                                                                                TextColor="DeepSkyBlue"
+                                                                                                FontAttributes="Bold"
+                                                                                                FontSize="Small" />
+                                                                                        <Label
+                                                                                                Text="{Binding Remarks}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Medium" />
+                                                                                </StackLayout>
+                                                                        </Border>
+                                                                </ViewCell>
+                                                        </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                        </ListView>
+                                        <Button Grid.Row="2"
+                                                BackgroundColor="DeepSkyBlue"
+                                                TextColor="White"
+                                                CornerRadius="10"
+                                                Margin="0,6,0,0"
+                                                Clicked="Close_Btn"
+                                                Text="Close" />
+                                </Grid>
+                        </Border>
+                </ContentView>
+
+                <!-- Overlay: loading spinner — spans all rows -->
+                <AbsoluteLayout x:Name="activity1"
+                        Grid.Row="0"
+                        Grid.RowSpan="9"
+                        IsVisible="false"
+                        Opacity="0.9"
+                        BackgroundColor="Transparent"
+                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        AbsoluteLayout.LayoutFlags="All">
+                        <Border BackgroundColor="#f2f2f2"
+                                StrokeThickness="0"
+                                AbsoluteLayout.LayoutBounds="0.5,0.4,200,60"
+                                AbsoluteLayout.LayoutFlags="PositionProportional">
+                                <StackLayout Orientation="Horizontal"
+                                        Margin="6">
+                                        <ActivityIndicator IsVisible="true"
+                                                IsRunning="true"
+                                                Margin="5" />
+                                        <Label Text="Please Wait ..."
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                VerticalTextAlignment="Center" />
+                                </StackLayout>
+                        </Border>
+                </AbsoluteLayout>
+
+        </Grid>
+
+</ContentPage>

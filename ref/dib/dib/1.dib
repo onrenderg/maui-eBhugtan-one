@@ -1,0 +1,431 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+public class MainClass
+{
+    private static readonly HttpClient client = new HttpClient();
+
+    public static async Task<string> GetRequestOne()
+    {
+        Console.WriteLine("Sending request...");
+
+        var response = await client.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
+
+        Console.WriteLine($"Status: {response.StatusCode}");
+
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        Console.WriteLine("Received response.");
+
+        return content;
+    }
+}
+
+public class Program
+{
+    public static async Task Main(string[] args)
+    {
+        var result = await MainClass.GetRequestOne();
+        Console.WriteLine(result);
+    }
+    
+}
+
+await Program.Main(null);
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+
+#!csharp
+
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+// Dummy Transfers class
+public class Transfers
+{
+    public string DepartmentName;
+    public string orderName;
+    public string HyperLink;
+    public string deptid;
+    public string uploadDate;
+    public string RefreshDate;
+}
+
+// Dummy database
+public static class transfersDatabase
+{
+    public static void Delete_Transfers() 
+    { 
+        Console.WriteLine("Deleted old transfers"); 
+    }
+    public static void Add_Transfers(Transfers t) 
+    { 
+        Console.WriteLine($"Added transfer: {t.DepartmentName} - {t.orderName}"); 
+    }
+}
+
+public class MainClass
+{
+    private static readonly HttpClient client = new HttpClient();
+
+    public static async Task GetRequestOne(string urltohit)
+    {
+        // Get JSON from URL
+        var result = await client.GetStringAsync(urltohit);
+
+        JObject parsed = JObject.Parse(result);
+
+        if (parsed["messages"] != null && parsed["messages"].ToString().Contains("Successfully"))
+        {
+            transfersDatabase.Delete_Transfers();
+
+            var nodes = parsed["records"];
+
+            foreach (var node in nodes)
+            {
+                var item = new Transfers
+                {
+                    DepartmentName = node["DepartmentName"]?.ToString(),
+                    orderName = WebUtility.HtmlDecode(node["orderName"]?.ToString()),
+                    HyperLink = node["HyperLink"]?.ToString(),
+                    deptid = node["deptid"]?.ToString(),
+                    uploadDate = node["uploadDate"]?.ToString(),
+                    RefreshDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")
+                };
+
+                transfersDatabase.Add_Transfers(item);
+            }
+        }
+        else
+        {
+            Console.WriteLine(parsed["messages"]?.ToString() ?? "No success message");
+        }
+    }
+}
+
+// Call it
+await MainClass.GetRequestOne("https://genpmis.hp.nic.in/android/etransfer.aspx");
+
+#!csharp
+
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+// Dummy Transfers class
+public class Transfers
+{
+    public string DepartmentName;
+    public string orderName;
+    public string HyperLink;
+    public string deptid;
+    public string uploadDate;
+    public string RefreshDate;
+}
+
+// Dummy database
+public static class transfersDatabase
+{
+    public static void Delete_Transfers() 
+    { 
+        Console.WriteLine("Deleted old transfers"); 
+    }
+    public static void Add_Transfers(Transfers t) 
+    { 
+        Console.WriteLine($"Added transfer: {t.DepartmentName} - {t.orderName}"); 
+    }
+}
+
+public class MainClass
+{
+    private static readonly HttpClient client = new HttpClient();
+
+    public static async Task GetRequestOne(string accessValue, string accessKey, string deptid)
+    {
+        // Build URL like Android code
+        string url = "https://genpmis.hp.nic.in/android/etransfer.aspx"
+            + "?access_value=" + Uri.EscapeDataString(accessValue)
+            + "&access_key=" + Uri.EscapeDataString(accessKey)
+            + "&deptid=" + Uri.EscapeDataString(deptid)
+            + "&mode=O";
+
+        Console.WriteLine("Request URL: " + url);
+
+        var result = await client.GetStringAsync(url);
+
+        JArray responseArray = JArray.Parse(result);
+        var firstObj = responseArray[0];
+
+        string status = firstObj["estatus"]?.ToString();
+        string message = firstObj["messages"]?.ToString();
+
+        if (status == "0")
+        {
+            Console.WriteLine("Error: " + message);
+        }
+        else
+        {
+            transfersDatabase.Delete_Transfers();
+
+            var records = firstObj["records"];
+            if (records != null)
+            {
+                foreach (var node in records)
+                {
+                    var item = new Transfers
+                    {
+                        DepartmentName = node["DepartmentName"]?.ToString(),
+                        orderName = WebUtility.HtmlDecode(node["orderName"]?.ToString()),
+                        HyperLink = node["HyperLink"]?.ToString(),
+                        deptid = node["deptid"]?.ToString(),
+                        uploadDate = node["uploadDate"]?.ToString(),
+                        RefreshDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")
+                    };
+
+                    transfersDatabase.Add_Transfers(item);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No records found.");
+            }
+        }
+    }
+}
+
+// Call it
+await MainClass.GetRequestOne("YOUR_ACC_VALUE", "YOUR_ACC_KEY", "DEPT_ID");
+
+#!csharp
+
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+// Dummy Transfers class
+public class Transfers
+{
+    public string DepartmentName;
+    public string orderName;
+    public string HyperLink;
+    public string deptid;
+    public string uploadDate;
+    public string RefreshDate;
+}
+
+// Dummy database
+public static class transfersDatabase
+{
+    public static void Delete_Transfers() 
+    { Console.WriteLine("Deleted old transfers"); 
+    }
+    public static void Add_Transfers(Transfers t) {
+         Console.WriteLine($"Added transfer: {t.DepartmentName} - {t.orderName}"); 
+         }
+}
+
+public class MainClass
+{
+    private static readonly HttpClient client = new HttpClient();
+
+    public static async Task GetRequestOne(string accessValue, string accessKey, string[] deptIds)
+    {
+        // Build the URL with comma-separated dept IDs
+        string deptParam = string.Join(",", deptIds);
+        string url = "http://genpmis.hp.nic.in/android/departmentLIst.aspx"
+            + "?access_value=" + Uri.EscapeDataString(accessValue)
+            + "&access_key=" + Uri.EscapeDataString(accessKey)
+            + "&deptid=" + Uri.EscapeDataString(deptParam)
+            + "&mode=O";
+
+        Console.WriteLine("Request URL: " + url);
+
+        var result = await client.GetStringAsync(url);
+
+        JObject responseObject = JObject.Parse(result);
+
+        string status = responseObject["estatus"]?.ToString();
+        string message = responseObject["messages"]?.ToString();
+
+        if (status == "0")
+        {
+            Console.WriteLine("Error: " + message);
+            return;
+        }
+
+        transfersDatabase.Delete_Transfers();
+
+        var records = responseObject["records"];
+        if (records != null)
+        {
+            foreach (var node in records)
+            {
+                var item = new Transfers
+                {
+                    DepartmentName = node["DepartmentName"]?.ToString(),
+                    orderName = WebUtility.HtmlDecode(node["orderName"]?.ToString()),
+                    HyperLink = node["HyperLink"]?.ToString(),
+                    deptid = node["deptid"]?.ToString(),
+                    uploadDate = node["uploadDate"]?.ToString(),
+                    RefreshDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")
+                };
+
+                transfersDatabase.Add_Transfers(item);
+            }
+        }
+        else
+        {
+            Console.WriteLine("No records found.");
+        }
+    }
+}
+
+// Example call with the full department list
+string[] deptIds = new string[]
+{
+    "REV","PER","HPD0001","HPD0002","HPD0004","HPD0008","HPD0009",
+    "HPD0010","HPD0011","HPD0014","HPD0015","HPD0040","HPD1010","HPX9999"
+};
+
+await MainClass.GetRequestOne(
+    "1CF88F38959D49C11493AD6FAEF204CA", // access_value
+    "80B7B95DC8CF961A1864328C59C7A33F", // access_key
+    deptIds
+);
+
+#!csharp
+
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+// Dummy Transfers class
+public class Transfers
+{
+    public string DepartmentName;
+    public string orderName;
+    public string HyperLink;
+    public string deptid;
+    public string uploadDate;
+    public string RefreshDate;
+}
+
+// Dummy database
+public static class transfersDatabase
+{
+    public static List<Transfers> AllTransfers = new List<Transfers>();
+
+    public static void Delete_Transfers()
+    {
+        AllTransfers.Clear();
+        Console.WriteLine("Deleted old transfers");
+    }
+
+    public static void Add_Transfers(Transfers t)
+    {
+        AllTransfers.Add(t);
+    }
+
+    public static void PrintAllTransfers()
+    {
+        foreach (var t in AllTransfers)
+        {
+            Console.WriteLine($"Added transfer: {t.DepartmentName} - {t.orderName}");
+        }
+    }
+}
+
+public class MainClass
+{
+    private static readonly HttpClient client = new HttpClient();
+
+    public static async Task GetRequestOne(string accessValue, string accessKey, string[] deptIds)
+    {
+        string deptParam = string.Join(",", deptIds);
+        string url = "http://genpmis.hp.nic.in/android/departmentLIst.aspx"
+            + "?access_value=" + Uri.EscapeDataString(accessValue)
+            + "&access_key=" + Uri.EscapeDataString(accessKey)
+            + "&deptid=" + Uri.EscapeDataString(deptParam)
+            + "&mode=O";
+
+        Console.WriteLine("Request URL: " + url);
+
+        var result = await client.GetStringAsync(url);
+
+        // JSON parsing happens here
+        JObject responseObject = JObject.Parse(result);
+
+        string status = responseObject["estatus"]?.ToString();
+        string message = responseObject["messages"]?.ToString();
+
+        if (status == "0")
+        {
+            Console.WriteLine("Error: " + message);
+            return;
+        }
+
+        // Clear old transfers
+        transfersDatabase.Delete_Transfers();
+
+        // Add new transfers
+        var records = responseObject["records"];
+        if (records != null)
+        {
+            foreach (var node in records)
+            {
+                var item = new Transfers
+                {
+                    DepartmentName = node["DepartmentName"]?.ToString(),
+                    orderName = WebUtility.HtmlDecode(node["orderName"]?.ToString()),
+                    HyperLink = node["HyperLink"]?.ToString(),
+                    deptid = node["deptid"]?.ToString(),
+                    uploadDate = node["uploadDate"]?.ToString(),
+                    RefreshDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")
+                };
+
+                transfersDatabase.Add_Transfers(item);
+            }
+
+            // Print all transfers at once
+            transfersDatabase.PrintAllTransfers();
+        }
+        else
+        {
+            Console.WriteLine("No records found.");
+        }
+    }
+}
+
+// Example call
+string[] deptIds = new string[]
+{
+    "REV","PER","HPD0001","HPD0002","HPD0004","HPD0008","HPD0009",
+    "HPD0010","HPD0011","HPD0014","HPD0015","HPD0040","HPD1010","HPX9999"
+};
+
+await MainClass.GetRequestOne(
+    "1CF88F38959D49C11493AD6FAEF204CA",
+    "80B7B95DC8CF961A1864328C59C7A33F",
+    deptIds
+);

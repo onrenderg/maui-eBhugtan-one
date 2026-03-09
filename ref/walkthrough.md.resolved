@@ -1,0 +1,1098 @@
+# Add/Remove Account Popup Revamp
+
+## Changes Made
+
+### [MorePage.xaml](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml)
+
+- **X close button** — added a `✕` label with `TapGestureRecognizer` in the top-right corner of the popup header
+- **CheckBox per account** — each account row now has a `CheckBox` bound to `IsSelected` alongside the account number
+- **Button swap** — left button is now **"Add Account"** (blue), right button is now **"Delete Account"** (red)
+
+```diff:MorePage.xaml
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="eBhugtan.MorePage"
+        xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+        Title="More"
+        IconImageSource="more">
+        <ContentPage.Content>
+                <Grid RowDefinitions="*" BackgroundColor="White">
+
+                        <!-- Row 0: Scrollable content -->
+                        <ScrollView Grid.Row="0">
+                                <VerticalStackLayout Margin="10" Spacing="1" Padding="10,0">
+
+                                        <!-- App Logo -->
+                                        <Border StrokeShape="RoundRectangle 75"
+                                                StrokeThickness="2"
+                                                Stroke="DeepSkyBlue"
+                                                Padding="0"
+                                                Margin="8"
+                                                WidthRequest="120"
+                                                HeightRequest="120"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Start">
+                                                <Image Source="bhugtan_ico" Margin="1" />
+                                        </Border>
+
+                                        <Label Text="v12.0"
+                                                FontSize="Small"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,0,0,0" />
+
+                                        <Label Text="eBhugtan - HP Government"
+                                                FontSize="Large"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Black"
+                                                Margin="0,-4,0,0" />
+
+                                        <Label Text="Govt. of Himachal Pradesh"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,0,0,10" />
+
+                                        <VerticalStackLayout Spacing="-5">
+                                                <!-- Call -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Call"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="📞" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="01772622132"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Website -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Website"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="🌐" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="himkosh.nic.in"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Email -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Email"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="✉️" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="dirtre-hp[at]nic[dot]in"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Privacy Policy -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="PrivacyPolicy"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="🔒" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="Privacy Policy"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Add / Remove Account — last card -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="DeepSkyBlue"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="AddRemoveBtn"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="👤" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="Add / Remove Account"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+                                        </VerticalStackLayout>
+
+
+                                        <!-- Designed & Developed by NIC -->
+                                        <Label Text="Designed &amp; Developed by"
+                                                FontSize="14"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,10,0,2" />
+                                        <Label Text="National Informatics Centre (NIC)"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="DeepSkyBlue"
+                                                Margin="0,0,0,6" />
+                                        <Image Source="ic_niclogo"
+                                                HorizontalOptions="Center"
+                                                HeightRequest="30"
+                                                Aspect="AspectFit"
+                                                Margin="0,4,0,16" />
+
+                                </VerticalStackLayout>
+                        </ScrollView>
+
+                        <!-- Overlay: popup — spans all rows -->
+                        <ContentView x:Name="popupDetails"
+                                Grid.Row="0"
+                                BackgroundColor="#C0808080"
+                                Padding="20"
+                                IsVisible="false">
+
+                                <Border Stroke="DeepSkyBlue"
+                                        StrokeThickness="2"
+                                        StrokeShape="RoundRectangle 16"
+                                        Padding="12"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="White">
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                RowSpacing="6">
+                                                <Label Grid.Row="0"
+                                                        x:Name="TitleOfContent"
+                                                        HorizontalOptions="Fill"
+                                                        HorizontalTextAlignment="Center"
+                                                        FontAttributes="Bold"
+                                                        TextColor="DeepSkyBlue"
+                                                        FontSize="Medium" />
+                                                <ListView Grid.Row="1"
+                                                        x:Name="Content_DetailedList"
+                                                        HasUnevenRows="True"
+                                                        SeparatorColor="Transparent"
+                                                        SelectionMode="None"
+                                                        VerticalOptions="Fill"
+                                                        BackgroundColor="Transparent"
+                                                        Margin="4">
+                                                        <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                        <ViewCell>
+                                                                                <Border Margin="4,6"
+                                                                                        Padding="10"
+                                                                                        StrokeShape="RoundRectangle 10"
+                                                                                        Stroke="#E0E0E0"
+                                                                                        Background="White">
+                                                                                        <Label
+                                                                                                Text="{Binding AccountNumber}"
+                                                                                                TextColor="Black"
+                                                                                                FontSize="Large"
+                                                                                                HorizontalOptions="Fill"
+                                                                                                HorizontalTextAlignment="Start" />
+                                                                                </Border>
+                                                                        </ViewCell>
+                                                                </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                </ListView>
+                                                <Grid Grid.Row="2"
+                                                        x:Name="Grid_Add_Account"
+                                                        RowDefinitions="Auto,Auto"
+                                                        RowSpacing="6"
+                                                        IsVisible="false">
+                                                        <Border Grid.Row="0"
+                                                                Padding="12,4"
+                                                                StrokeShape="RoundRectangle 10"
+                                                                Stroke="#E0E0E0"
+                                                                Background="White">
+                                                                <Entry x:Name="AcNo"
+                                                                        Placeholder="Enter Account Number"
+                                                                        IsTextPredictionEnabled="False"
+                                                                        TextColor="Black" />
+                                                        </Border>
+
+                                                        <Border Grid.Row="1"
+                                                                Padding="12,4"
+                                                                StrokeShape="RoundRectangle 10"
+                                                                Stroke="#E0E0E0"
+                                                                Background="White">
+                                                                <Picker x:Name="Picker_FinYear"
+                                                                        Title="Choose Financial year"
+                                                                        TitleColor="Gray"
+                                                                        TextColor="Black"
+                                                                        HorizontalOptions="Fill" />
+                                                        </Border>
+                                                </Grid>
+                                                <Grid Grid.Row="3"
+                                                        ColumnDefinitions="*,*"
+                                                        ColumnSpacing="8"
+                                                        Margin="0,4,0,0">
+                                                        <Button Grid.Column="0"
+                                                                BackgroundColor="DeepSkyBlue"
+                                                                TextColor="White"
+                                                                CornerRadius="10"
+                                                                Clicked="Close_Btn"
+                                                                Text="Close" />
+                                                        <Button Grid.Column="1"
+                                                                BackgroundColor="DeepSkyBlue"
+                                                                TextColor="White"
+                                                                CornerRadius="10"
+                                                                Clicked="Submit_Btn"
+                                                                Text="Add Account"
+                                                                x:Name="Lbl_Add_new" />
+                                                </Grid>
+                                        </Grid>
+                                </Border>
+                        </ContentView>
+
+                        <!-- Overlay: loading spinner -->
+                        <AbsoluteLayout x:Name="activity1"
+                                Grid.Row="0"
+                                IsVisible="false"
+                                Opacity="0.9"
+                                BackgroundColor="Transparent"
+                                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All">
+                                <Border BackgroundColor="#f2f2f2"
+                                        StrokeThickness="0"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,200,60"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional">
+                                        <StackLayout Orientation="Horizontal" Margin="6">
+                                                <ActivityIndicator IsVisible="true" IsRunning="true"
+                                                        Margin="5" />
+                                                <Label Text="Please Wait ..."
+                                                        TextColor="Black"
+                                                        FontAttributes="Bold"
+                                                        VerticalTextAlignment="Center" />
+                                        </StackLayout>
+                                </Border>
+                        </AbsoluteLayout>
+
+                </Grid>
+        </ContentPage.Content>
+</ContentPage>
+===
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="eBhugtan.MorePage"
+        xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+        Title="More"
+        IconImageSource="more">
+        <ContentPage.Content>
+                <Grid RowDefinitions="*" BackgroundColor="White">
+
+                        <!-- Row 0: Scrollable content -->
+                        <ScrollView Grid.Row="0">
+                                <VerticalStackLayout Margin="10" Spacing="1" Padding="10,0">
+
+                                        <!-- App Logo -->
+                                        <Border StrokeShape="RoundRectangle 75"
+                                                StrokeThickness="2"
+                                                Stroke="DeepSkyBlue"
+                                                Padding="0"
+                                                Margin="8"
+                                                WidthRequest="120"
+                                                HeightRequest="120"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Start">
+                                                <Image Source="bhugtan_ico" Margin="1" />
+                                        </Border>
+
+                                        <Label Text="v12.0"
+                                                FontSize="Small"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,0,0,0" />
+
+                                        <Label Text="eBhugtan - HP Government"
+                                                FontSize="Large"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Black"
+                                                Margin="0,-4,0,0" />
+
+                                        <Label Text="Govt. of Himachal Pradesh"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,0,0,10" />
+
+                                        <VerticalStackLayout Spacing="-5">
+                                                <!-- Call -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Call"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="📞" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="01772622132"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Website -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Website"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="🌐" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="himkosh.nic.in"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Email -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="NIC_Email"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="✉️" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="dirtre-hp[at]nic[dot]in"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Privacy Policy -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="#E0E0E0"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="PrivacyPolicy"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="🔒" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="Privacy Policy"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="Black" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+
+                                                <!-- Add / Remove Account — last card -->
+                                                <Frame Margin="0,4" Padding="10" CornerRadius="10"
+                                                        HasShadow="True"
+                                                        BorderColor="DeepSkyBlue"
+                                                        BackgroundColor="White">
+                                                        <Frame.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                        Tapped="AddRemoveBtn"
+                                                                        NumberOfTapsRequired="1" />
+                                                        </Frame.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                                                ColumnSpacing="10">
+                                                                <Label Text="👤" FontSize="20"
+                                                                        VerticalOptions="Center" />
+                                                                <Label Grid.Column="1"
+                                                                        Text="Add / Remove Account"
+                                                                        FontSize="16"
+                                                                        FontAttributes="Bold"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                                <Label Grid.Column="2" Text="›"
+                                                                        FontSize="28"
+                                                                        VerticalOptions="Center"
+                                                                        TextColor="DeepSkyBlue" />
+                                                        </Grid>
+                                                </Frame>
+                                        </VerticalStackLayout>
+
+
+                                        <!-- Designed & Developed by NIC -->
+                                        <Label Text="Designed &amp; Developed by"
+                                                FontSize="14"
+                                                HorizontalOptions="Center"
+                                                TextColor="Gray"
+                                                Margin="0,10,0,2" />
+                                        <Label Text="National Informatics Centre (NIC)"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Center"
+                                                TextColor="DeepSkyBlue"
+                                                Margin="0,0,0,6" />
+                                        <Image Source="ic_niclogo"
+                                                HorizontalOptions="Center"
+                                                HeightRequest="30"
+                                                Aspect="AspectFit"
+                                                Margin="0,4,0,16" />
+
+                                </VerticalStackLayout>
+                        </ScrollView>
+
+                        <!-- Overlay: popup — spans all rows -->
+                        <ContentView x:Name="popupDetails"
+                                Grid.Row="0"
+                                BackgroundColor="#C0808080"
+                                Padding="20"
+                                IsVisible="false">
+
+                                <Border Stroke="DeepSkyBlue"
+                                        StrokeThickness="2"
+                                        StrokeShape="RoundRectangle 16"
+                                        Padding="12"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="White">
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                RowSpacing="6">
+                                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                                        <Label x:Name="TitleOfContent"
+                                                                HorizontalOptions="Fill"
+                                                                HorizontalTextAlignment="Center"
+                                                                FontAttributes="Bold"
+                                                                TextColor="DeepSkyBlue"
+                                                                FontSize="Medium"
+                                                                VerticalOptions="Center" />
+                                                        <Label Grid.Column="1"
+                                                                Text="✕"
+                                                                FontSize="22"
+                                                                TextColor="Gray"
+                                                                FontAttributes="Bold"
+                                                                VerticalOptions="Start"
+                                                                HorizontalOptions="End"
+                                                                Padding="4,0">
+                                                                <Label.GestureRecognizers>
+                                                                        <TapGestureRecognizer Tapped="Close_Btn" />
+                                                                </Label.GestureRecognizers>
+                                                        </Label>
+                                                </Grid>
+                                                <ListView Grid.Row="1"
+                                                        x:Name="Content_DetailedList"
+                                                        HasUnevenRows="True"
+                                                        SeparatorColor="Transparent"
+                                                        SelectionMode="None"
+                                                        VerticalOptions="Fill"
+                                                        BackgroundColor="Transparent"
+                                                        Margin="4">
+                                                        <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                        <ViewCell>
+                                                                                <Border Margin="4,6"
+                                                                                        Padding="10"
+                                                                                        StrokeShape="RoundRectangle 10"
+                                                                                        Stroke="#E0E0E0"
+                                                                                        Background="White">
+                                                                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                                                                                <CheckBox Grid.Column="0"
+                                                                                                        IsChecked="{Binding IsSelected}"
+                                                                                                        Color="DeepSkyBlue"
+                                                                                                        VerticalOptions="Center" />
+                                                                                                <Label Grid.Column="1"
+                                                                                                        Text="{Binding AccountNumber}"
+                                                                                                        TextColor="Black"
+                                                                                                        FontSize="Large"
+                                                                                                        VerticalOptions="Center"
+                                                                                                        HorizontalOptions="Fill"
+                                                                                                        HorizontalTextAlignment="Start" />
+                                                                                        </Grid>
+                                                                                </Border>
+                                                                        </ViewCell>
+                                                                </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                </ListView>
+                                                <Grid Grid.Row="2"
+                                                        x:Name="Grid_Add_Account"
+                                                        RowDefinitions="Auto,Auto"
+                                                        RowSpacing="6"
+                                                        IsVisible="false">
+                                                        <Border Grid.Row="0"
+                                                                Padding="12,4"
+                                                                StrokeShape="RoundRectangle 10"
+                                                                Stroke="#E0E0E0"
+                                                                Background="White">
+                                                                <Entry x:Name="AcNo"
+                                                                        Placeholder="Enter Account Number"
+                                                                        IsTextPredictionEnabled="False"
+                                                                        TextColor="Black" />
+                                                        </Border>
+
+                                                        <Border Grid.Row="1"
+                                                                Padding="12,4"
+                                                                StrokeShape="RoundRectangle 10"
+                                                                Stroke="#E0E0E0"
+                                                                Background="White">
+                                                                <Picker x:Name="Picker_FinYear"
+                                                                        Title="Choose Financial year"
+                                                                        TitleColor="Gray"
+                                                                        TextColor="Black"
+                                                                        HorizontalOptions="Fill" />
+                                                        </Border>
+                                                </Grid>
+                                                <Grid Grid.Row="3"
+                                                        ColumnDefinitions="*,*"
+                                                        ColumnSpacing="8"
+                                                        Margin="0,4,0,0">
+                                                        <Button Grid.Column="0"
+                                                                BackgroundColor="DeepSkyBlue"
+                                                                TextColor="White"
+                                                                CornerRadius="10"
+                                                                Clicked="Submit_Btn"
+                                                                Text="Add Account"
+                                                                x:Name="Lbl_Add_new" />
+                                                        <Button Grid.Column="1"
+                                                                BackgroundColor="Red"
+                                                                TextColor="White"
+                                                                CornerRadius="10"
+                                                                Clicked="DeleteSelected_Btn"
+                                                                Text="Delete Account"
+                                                                x:Name="Btn_Delete" />
+                                                </Grid>
+                                        </Grid>
+                                </Border>
+                        </ContentView>
+
+                        <!-- Overlay: loading spinner -->
+                        <AbsoluteLayout x:Name="activity1"
+                                Grid.Row="0"
+                                IsVisible="false"
+                                Opacity="0.9"
+                                BackgroundColor="Transparent"
+                                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All">
+                                <Border BackgroundColor="#f2f2f2"
+                                        StrokeThickness="0"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,200,60"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional">
+                                        <StackLayout Orientation="Horizontal" Margin="6">
+                                                <ActivityIndicator IsVisible="true" IsRunning="true"
+                                                        Margin="5" />
+                                                <Label Text="Please Wait ..."
+                                                        TextColor="Black"
+                                                        FontAttributes="Bold"
+                                                        VerticalTextAlignment="Center" />
+                                        </StackLayout>
+                                </Border>
+                        </AbsoluteLayout>
+
+                </Grid>
+        </ContentPage.Content>
+</ContentPage>
+```
+
+---
+
+### [MorePage.xaml.cs](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs)
+
+- **[SelectableAccount](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#11-16) class** — new wrapper with `AccountNumber` + `IsSelected` for checkbox binding
+- **Removed** `Content_DetailedList_ItemTapped` handler (no more tap-to-remove)
+- **[AddRemoveBtn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#29-57)** — builds [SelectableAccount](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#11-16) list, shows checkboxes
+- **[DeleteSelected_Btn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#63-113)** — iterates checked accounts, confirms with user, deletes from DB, refreshes app
+- **[Submit_Btn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#114-147)** — toggles to add-account form (entry + picker), then submits
+
+```diff:MorePage.xaml.cs
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+
+namespace eBhugtan
+{
+    public partial class MorePage : ContentPage
+    {
+        Database_Accounts database_Accounts;
+        Database_Payments database_Payments;
+        public MorePage()
+        {
+            InitializeComponent();
+            database_Payments = new Database_Payments();
+            database_Accounts = new Database_Accounts();
+            Content_DetailedList.ItemTapped += Content_DetailedList_ItemTapped;
+        }
+
+        private async void Content_DetailedList_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var MyPopup = await DisplayAlert("eBhugtan", "Are you sure You Want to Remove Account From App?", "Yes", "Cancel");
+            if (App.Accounts_List.Count() == 1)
+            {
+                if (MyPopup == true)
+                {
+                    database_Accounts.DeleteAccounts();
+                    database_Payments.DeletePayments();
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
+                }
+                else
+                {
+                    return;
+                }
+            }else
+            {
+                if (MyPopup == true)
+                {
+                    var currentrecord = e.Item as Accounts;
+                    database_Accounts.Custom($"delete from accounts where AccountNumber == '{currentrecord.AccountNumber}'");
+                    await Task.Delay(15);
+                    database_Accounts.Custom($"update Accounts set SelectedAccount = CASE WHEN IDs = (SELECT min(IDS) FROM Accounts) THEN 1 ELSE 0 END");
+                    await Task.Delay(15);
+                    database_Payments.Custom($"delete from payments where AccountNumber == '{currentrecord.AccountNumber}'");
+                    await Task.Delay(20);
+                    App.Accounts_List = database_Accounts.GetAccounts("Select * from Accounts");
+                    popupDetails.IsVisible = false;
+                    Application.Current.MainPage = new NavigationPage(new TabViewPage("3"));
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
+        void AddRemoveBtn(object sender, System.EventArgs e)
+        {
+            if (!Picker_FinYear.Items.Any())
+            {
+                Picker_FinYear.ItemsSource = App.YearsList;
+                Picker_FinYear.SelectedIndex = 0;
+            }
+            else
+            {
+                Picker_FinYear.SelectedIndex = 0;
+            }
+            Content_DetailedList.ItemsSource = App.Accounts_List;
+            TitleOfContent.Text = "Tap Account To Remove";
+            Lbl_Add_new.Text = "Add Account";
+            Content_DetailedList.IsVisible = true;
+            Grid_Add_Account.IsVisible = false;
+            popupDetails.IsVisible = true;
+        }
+        void Close_Btn(object s, EventArgs e)
+        {
+            popupDetails.IsVisible = false;
+        }
+        async void Submit_Btn(object s, EventArgs e)
+        {
+            if (TitleOfContent.Text == "Tap Account To Remove")
+            {
+                TitleOfContent.Text = "Add Account";
+                AcNo.Text = null;
+                AcNo.Placeholder = "Enter Account Number";
+                Content_DetailedList.IsVisible = false;
+                Grid_Add_Account.IsVisible = true;
+                Lbl_Add_new.Text = "Submit";
+            }else
+            {
+                
+                if (string.IsNullOrEmpty(AcNo.Text))
+                {
+                    await DisplayAlert("eBhugtan", "Please Enter Account Number", "OK");
+                    AcNo.Focus();
+                    return;
+                }
+                if (App.Accounts_List.Where(x => x.AccountNumber == AcNo.Text).Count() == 0)
+                {
+                    activity1.IsVisible = true;
+                    await AddAccountServiceRequest();
+                }else
+                {
+                    await DisplayAlert("eBhugtan", "Account Already Exists", "OK");
+                }
+            }
+        }
+        void NIC_Call(object sender, EventArgs e)
+        {
+            Launcher.TryOpenAsync("tel:01772622132");
+        }
+        async void NIC_Website(object sender, EventArgs e)
+        {
+            await Browser.OpenAsync("https://himkosh.nic.in/", BrowserLaunchMode.SystemPreferred);
+        }
+        async void NIC_Email(object sender, EventArgs e)
+        {
+            await Launcher.OpenAsync(new Uri("mailto:dirtre-hp@nic.in"));
+        }
+        async void PrivacyPolicy(object sender, EventArgs e)
+        {
+            await Browser.OpenAsync("https://mobileappshp.nic.in/assets/pdf/mobile-app-privacy-policy/eBhugtan.html", BrowserLaunchMode.SystemPreferred);
+        }
+        private async Task AddAccountServiceRequest()
+        {
+            int finYear = int.Parse(Picker_FinYear.Items[Picker_FinYear.SelectedIndex]);
+            var svc = new HitServices();
+            int status = await svc.FetchPaymentsAsync(AcNo.Text, finYear,
+                             database_Accounts, database_Payments, clearExisting: false);
+            activity1.IsVisible = false;
+
+            switch (status)
+            {
+                case 200:
+                    database_Accounts.AddAccounts(new Accounts
+                    {
+                        AccountNumber   = AcNo.Text,
+                        Fin_Year        = finYear,
+                        SelectedAccount = 0
+                    });
+                    await DisplayAlert("eBhugtan", "Account Added Successfully", "OK");
+                    App.Accounts_List = database_Accounts.GetAccounts("Select * from Accounts");
+                    Application.Current.MainPage = new NavigationPage(new TabViewPage("sync"));
+                    break;
+
+                case 204:
+                    await DisplayAlert("eBhugtan",
+                        "It seems you are offline. Please check your internet connection.", "OK");
+                    break;
+
+                case 300:
+                    await DisplayAlert("eBhugtan",
+                        "No Records Found or invalid credentials. Please check and try again.", "OK");
+                    break;
+
+                default:
+                    await DisplayAlert("eBhugtan",
+                        "Unable to retrieve data from server.\nPlease try again.", "OK");
+                    break;
+            }
+        }
+    }
+}
+===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+
+namespace eBhugtan
+{
+    // Wrapper class for checkbox binding in the account list
+    public class SelectableAccount
+    {
+        public string AccountNumber { get; set; }
+        public bool IsSelected { get; set; }
+    }
+
+    public partial class MorePage : ContentPage
+    {
+        Database_Accounts database_Accounts;
+        Database_Payments database_Payments;
+
+        public MorePage()
+        {
+            InitializeComponent();
+            database_Payments = new Database_Payments();
+            database_Accounts = new Database_Accounts();
+        }
+
+        void AddRemoveBtn(object sender, EventArgs e)
+        {
+            if (!Picker_FinYear.Items.Any())
+            {
+                Picker_FinYear.ItemsSource = App.YearsList;
+                Picker_FinYear.SelectedIndex = 0;
+            }
+            else
+            {
+                Picker_FinYear.SelectedIndex = 0;
+            }
+
+            // Build selectable list with checkboxes
+            var selectableList = App.Accounts_List
+                .Select(a => new SelectableAccount
+                {
+                    AccountNumber = a.AccountNumber,
+                    IsSelected = false
+                }).ToList();
+
+            Content_DetailedList.ItemsSource = selectableList;
+            TitleOfContent.Text = "Select Accounts To Remove";
+            Lbl_Add_new.Text = "Add Account";
+            Btn_Delete.IsVisible = true;
+            Content_DetailedList.IsVisible = true;
+            Grid_Add_Account.IsVisible = false;
+            popupDetails.IsVisible = true;
+        }
+
+        void Close_Btn(object s, EventArgs e)
+        {
+            popupDetails.IsVisible = false;
+        }
+
+        async void DeleteSelected_Btn(object s, EventArgs e)
+        {
+            var items = Content_DetailedList.ItemsSource as List<SelectableAccount>;
+            if (items == null) return;
+
+            var selectedItems = items.Where(x => x.IsSelected).ToList();
+
+            if (!selectedItems.Any())
+            {
+                await DisplayAlert("eBhugtan", "Please select at least one account to delete.", "OK");
+                return;
+            }
+
+            // Check if user is trying to delete ALL accounts
+            if (selectedItems.Count == App.Accounts_List.Count())
+            {
+                var confirmAll = await DisplayAlert("eBhugtan",
+                    "Are you sure you want to remove ALL accounts from the App?", "Yes", "Cancel");
+                if (confirmAll)
+                {
+                    database_Accounts.DeleteAccounts();
+                    database_Payments.DeletePayments();
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
+                }
+                return;
+            }
+
+            var confirm = await DisplayAlert("eBhugtan",
+                "Are you sure you want to remove the selected account(s)?", "Yes", "Cancel");
+
+            if (confirm)
+            {
+                foreach (var item in selectedItems)
+                {
+                    database_Accounts.Custom(
+                        $"delete from accounts where AccountNumber == '{item.AccountNumber}'");
+                    await Task.Delay(15);
+                    database_Payments.Custom(
+                        $"delete from payments where AccountNumber == '{item.AccountNumber}'");
+                    await Task.Delay(15);
+                }
+
+                database_Accounts.Custom(
+                    "update Accounts set SelectedAccount = CASE WHEN IDs = (SELECT min(IDS) FROM Accounts) THEN 1 ELSE 0 END");
+                await Task.Delay(20);
+                App.Accounts_List = database_Accounts.GetAccounts("Select * from Accounts");
+                popupDetails.IsVisible = false;
+                Application.Current.MainPage = new NavigationPage(new TabViewPage("3"));
+            }
+        }
+
+        async void Submit_Btn(object s, EventArgs e)
+        {
+            if (Content_DetailedList.IsVisible)
+            {
+                // Switch to Add Account form
+                TitleOfContent.Text = "Add Account";
+                AcNo.Text = null;
+                AcNo.Placeholder = "Enter Account Number";
+                Content_DetailedList.IsVisible = false;
+                Grid_Add_Account.IsVisible = true;
+                Btn_Delete.IsVisible = false;
+                Lbl_Add_new.Text = "Submit";
+            }
+            else
+            {
+                // Submit new account
+                if (string.IsNullOrEmpty(AcNo.Text))
+                {
+                    await DisplayAlert("eBhugtan", "Please Enter Account Number", "OK");
+                    AcNo.Focus();
+                    return;
+                }
+                if (App.Accounts_List.Where(x => x.AccountNumber == AcNo.Text).Count() == 0)
+                {
+                    activity1.IsVisible = true;
+                    await AddAccountServiceRequest();
+                }
+                else
+                {
+                    await DisplayAlert("eBhugtan", "Account Already Exists", "OK");
+                }
+            }
+        }
+
+        void NIC_Call(object sender, EventArgs e)
+        {
+            Launcher.TryOpenAsync("tel:01772622132");
+        }
+        async void NIC_Website(object sender, EventArgs e)
+        {
+            await Browser.OpenAsync("https://himkosh.nic.in/", BrowserLaunchMode.SystemPreferred);
+        }
+        async void NIC_Email(object sender, EventArgs e)
+        {
+            await Launcher.OpenAsync(new Uri("mailto:dirtre-hp@nic.in"));
+        }
+        async void PrivacyPolicy(object sender, EventArgs e)
+        {
+            await Browser.OpenAsync("https://mobileappshp.nic.in/assets/pdf/mobile-app-privacy-policy/eBhugtan.html", BrowserLaunchMode.SystemPreferred);
+        }
+
+        private async Task AddAccountServiceRequest()
+        {
+            int finYear = int.Parse(Picker_FinYear.Items[Picker_FinYear.SelectedIndex]);
+            var svc = new HitServices();
+            int status = await svc.FetchPaymentsAsync(AcNo.Text, finYear,
+                             database_Accounts, database_Payments, clearExisting: false);
+            activity1.IsVisible = false;
+
+            switch (status)
+            {
+                case 200:
+                    database_Accounts.AddAccounts(new Accounts
+                    {
+                        AccountNumber   = AcNo.Text,
+                        Fin_Year        = finYear,
+                        SelectedAccount = 0
+                    });
+                    await DisplayAlert("eBhugtan", "Account Added Successfully", "OK");
+                    App.Accounts_List = database_Accounts.GetAccounts("Select * from Accounts");
+                    Application.Current.MainPage = new NavigationPage(new TabViewPage("sync"));
+                    break;
+
+                case 204:
+                    await DisplayAlert("eBhugtan",
+                        "It seems you are offline. Please check your internet connection.", "OK");
+                    break;
+
+                case 300:
+                    await DisplayAlert("eBhugtan",
+                        "No Records Found or invalid credentials. Please check and try again.", "OK");
+                    break;
+
+                default:
+                    await DisplayAlert("eBhugtan",
+                        "Unable to retrieve data from server.\nPlease try again.", "OK");
+                    break;
+            }
+        }
+    }
+}
+
+```
+
+## Popup Flow
+
+```mermaid
+flowchart TD
+    A["Tap 'Add / Remove Account'"] --> B["Popup opens with account list + checkboxes"]
+    B --> C{"User action"}
+    C -->|"Tap ✕"| D["Popup closes"]
+    C -->|"Check accounts → 'Delete Account'"| E["Confirm → delete selected accounts"]
+    C -->|"'Add Account' button"| F["Show add-account form"]
+    F --> G["Enter account + pick year → Submit"]
+```

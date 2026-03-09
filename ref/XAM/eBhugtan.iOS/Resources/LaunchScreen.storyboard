@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="X5k-f2-b5h">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="gAE-YM-kbH">
+            <objects>
+                <viewController id="X5k-f2-b5h" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Y8P-hJ-Z43"/>
+                        <viewControllerLayoutGuide type="bottom" id="9ZL-r4-8FZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yd7-JS-zBw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Bhugtan_ico.png" translatesAutoresizingMaskIntoConstraints="NO" id="23">
+                                <rect key="frame" x="80" y="321" width="254" height="254"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="23" secondAttribute="height" multiplier="1:1" id="Elr-uy-q5M"/>
+                                    <constraint firstAttribute="width" secondItem="23" secondAttribute="height" multiplier="1:1" id="HCM-cs-dlN"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="23" firstAttribute="top" relation="greaterThanOrEqual" secondItem="yd7-JS-zBw" secondAttribute="top" constant="80" id="6k2-ZW-mqF"/>
+                            <constraint firstItem="23" firstAttribute="centerY" secondItem="yd7-JS-zBw" secondAttribute="centerY" id="GJW-Ka-mHW"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="23" secondAttribute="bottom" id="cMg-YA-Ud5"/>
+                            <constraint firstItem="23" firstAttribute="centerX" secondItem="yd7-JS-zBw" secondAttribute="centerX" id="hFS-E6-uZk"/>
+                            <constraint firstItem="23" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yd7-JS-zBw" secondAttribute="leading" constant="80" id="srx-9H-EZ2"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="23" secondAttribute="trailing" id="vio-8v-9FT"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XAI-xm-WK6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="349" y="339"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Bhugtan_ico.png" width="1024" height="1024"/>
+    </resources>
+</document>

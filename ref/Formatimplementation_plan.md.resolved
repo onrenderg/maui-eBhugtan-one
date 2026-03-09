@@ -1,0 +1,93 @@
+# Revamp Add/Remove Account Popup in MorePage
+
+The current popup opens on tapping "Add / Remove Account". It shows a list of account numbers and users tap an account to remove it (triggering a confirmation alert). The two buttons at the bottom are **Close** (left) and **Add Account** (right).
+
+**Requested Changes:**
+1. Add a **CheckBox** in front of each account number (instead of tap-to-remove)
+2. Rename the **"Add Account"** button → **"Delete Account"** (deletes checked accounts)
+3. Rename the **"Close"** button → **"Add Account"** (shows the add-account form)
+4. Add an **X** close button in the top-right corner of the popup
+
+## Proposed Changes
+
+### MorePage UI
+
+#### [MODIFY] [MorePage.xaml](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml)
+
+**Popup header (Row 0):** Change from a single `Label` to a `Grid` with the title on the left and an **X** close button (`ImageButton` or `Label` with tap gesture) on the right.
+
+```diff
+-<Label Grid.Row="0" x:Name="TitleOfContent" ... />
++<Grid Grid.Row="0" ColumnDefinitions="*,Auto">
++    <Label x:Name="TitleOfContent" ... />
++    <Label Grid.Column="1" Text="✕" FontSize="22" TextColor="Gray"
++           VerticalOptions="Start" HorizontalOptions="End">
++        <Label.GestureRecognizers>
++            <TapGestureRecognizer Tapped="Close_Btn" />
++        </Label.GestureRecognizers>
++    </Label>
++</Grid>
+```
+
+**ListView ItemTemplate:** Add a `CheckBox` before the account number label.
+
+```diff
+ <ViewCell>
+-    <Border ...>
+-        <Label Text="{Binding AccountNumber}" ... />
+-    </Border>
++    <Border ...>
++        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
++            <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"
++                      Color="DeepSkyBlue" VerticalOptions="Center" />
++            <Label Grid.Column="1" Text="{Binding AccountNumber}"
++                   TextColor="Black" FontSize="Large"
++                   VerticalOptions="Center" />
++        </Grid>
++    </Border>
+```
+
+**Bottom buttons:** Swap the labels:
+
+```diff
+-<Button Grid.Column="0" ... Clicked="Close_Btn" Text="Close" />
+-<Button Grid.Column="1" ... Clicked="Submit_Btn" Text="Add Account" x:Name="Lbl_Add_new" />
++<Button Grid.Column="0" ... Clicked="Submit_Btn" Text="Add Account" x:Name="Lbl_Add_new" />
++<Button Grid.Column="1" ... Clicked="DeleteSelected_Btn" Text="Delete Account"
++        x:Name="Btn_Delete" BackgroundColor="Red" />
+```
+
+---
+
+### MorePage Code-Behind
+
+#### [MODIFY] [MorePage.xaml.cs](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs)
+
+- **Remove** `Content_DetailedList.ItemTapped` handler and the [Content_DetailedList_ItemTapped](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#21-57) method (no longer needed since selection is via checkboxes).
+- **Create a wrapper class** `SelectableAccount` with `IsSelected` (bool) + `AccountNumber` (string) to bind to the CheckBox. Build the list from `App.Accounts_List`.
+- **[AddRemoveBtn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#58-76)**: Populate `Content_DetailedList.ItemsSource` with `SelectableAccount` objects. Set title to `"Select Accounts To Remove"`. Show checkbox list and both buttons.
+- **New `DeleteSelected_Btn` handler**: Iterate checked items, delete them from DB (same logic as current tap handler), refresh accounts list.
+- **[Submit_Btn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#80-109)**: Now serves as "Add Account" — shows the add-account form (same as current toggle behavior).
+- **[Close_Btn](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/MorePage.xaml.cs#76-80)**: Unchanged (hides popup), also wired to the X button.
+
+---
+
+### Accounts Model
+
+#### [MODIFY] [Accounts.cs](file:///mnt/c/Users/parth-nic/Pictures/JAN/mar02/eBhugtan/Accounts.cs)
+
+No changes needed. The `IsSelected` property lives on the new `SelectableAccount` wrapper, not on the SQLite model.
+
+## Verification Plan
+
+### Manual Verification
+
+Since this is a .NET MAUI mobile app with no automated test project, verification is manual:
+
+1. **Build the project** — run `dotnet build` in the project directory to confirm there are no compile errors
+2. **User testing on device/emulator** — deploy and verify:
+   - Open the app → More tab → tap "Add / Remove Account"
+   - Popup should show account list with checkboxes and an **X** button in the top-right corner
+   - Clicking **X** closes the popup
+   - Check one or more accounts, tap **"Delete Account"** → should confirm and delete
+   - Tap **"Add Account"** → should show the add-account form with entry + picker + "Submit" button

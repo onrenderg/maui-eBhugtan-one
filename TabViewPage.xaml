@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="eBhugtan.TabViewPage"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+    android:TabbedPage.ToolbarPlacement="Bottom"
+    xmlns:views="clr-namespace:eBhugtan">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="refreshico"
+            x:Name="syncbtn"
+            Clicked="SyncNow" />
+    </ContentPage.ToolbarItems>
+
+    <NavigationPage.TitleView>
+        <views:NavTitleView />
+    </NavigationPage.TitleView>
+
+</TabbedPage>

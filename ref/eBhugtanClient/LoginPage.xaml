@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="eBhugtanClient.LoginPage"
+    Title="eBhugtan Login"
+    Shell.NavBarIsVisible="False">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+                <Image Source="dotnet_bot.png"
+                    HeightRequest="150"
+                    HorizontalOptions="Center" />
+
+                <Label Text="eBhugtan"
+                    FontSize="32"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center" />
+
+                <Border StrokeShape="RoundRectangle 10" Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Account Number" FontAttributes="Bold" />
+                        <Entry x:Name="AccountNumberEntry"
+                            Placeholder="Enter 11-digit Account Number"
+                            Keyboard="Numeric"
+                            MaxLength="11" />
+
+                        <Label Text="Financial Year" FontAttributes="Bold" />
+                        <Picker x:Name="YearPicker" Title="Select Year">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>2025</x:String>
+                                    <x:String>2024</x:String>
+                                    <x:String>2023</x:String>
+                                    <x:String>2022</x:String>
+                                    <x:String>2021</x:String>
+                                    <x:String>2020</x:String>
+                                    <x:String>2019</x:String>
+                                    <x:String>2018</x:String>
+                                    <x:String>2017</x:String>
+                                    <x:String>2016</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+
+                        <Button x:Name="LoginBtn"
+                            Text="Login"
+                            Clicked="LoginBtn_Clicked"
+                            BackgroundColor="DeepSkyBlue"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="50" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ContentView x:Name="LoadingOverlay" IsVisible="False" BackgroundColor="#80000000">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="True" Color="White" Scale="2" />
+                <Label Text="Fetching Details..." TextColor="White" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ContentView>
+    </Grid>
+</ContentPage>

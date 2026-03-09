@@ -1,0 +1,73 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+ // add members, methods, and properties as needed
+
+
+using System;
+public class HitServices
+{
+
+}
+Console.WriteLine("Hello World!");
+
+#!csharp
+
+public class HitServices()
+{
+    public void printHelloWorld()
+    {
+        Console.WriteLine("Hello World!");
+    }
+    
+}
+
+var hitServices = new HitServices();
+hitServices.printHelloWorld();
+
+#!csharp
+
+// {
+//     "message": {
+//         "message": "Unable to get Data.",
+//         "status": "false"
+//     },
+//     "otherPayments": []
+// }
+
+#!csharp
+
+using System.Net.Http;
+using System.Threading.Tasks;
+
+public class HitServices
+{
+
+
+    public async Task<string> ServiceGetRequest()
+    {
+        HttpResponseMessage response;
+        var client  = new HttpClient();
+        var PageFinYear = "2023-2024";
+        var PageAcountNumber = "1234567890";
+        try 
+        {
+
+            response = await client.GetAsync($"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={PageFinYear}&bankAccNo={PageAcountNumber}");
+            // return (int)response.StatusCode;
+            var jsonRes = await response.Content.ReadAsStringAsync();
+            return jsonRes;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }   
+}
+
+var hitServices = new HitServices();
+string jsonResult = await hitServices.ServiceGetRequest();
+Console.WriteLine($"JSON Result: {jsonResult}");

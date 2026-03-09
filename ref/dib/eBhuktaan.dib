@@ -1,0 +1,247 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+using System.Net.Http;
+
+public class HitServcies
+{
+
+    public string PageFinYear = "2023-2024";
+    public  string PageAcountNumber = "1234567890";
+    public   async Task<string> GetHit()
+    {
+        HttpResponseMessage res ;
+        var client = new HttpClient();  
+        res = await client.GetAsync($"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={PageFinYear}&bankAccNo={PageAcountNumber}");
+        var rawJson = await res.Content.ReadAsStringAsync();
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            Console.WriteLine(rawJson);
+        }
+        else 
+        {
+            Console.WriteLine("Error");
+        }
+        
+        return "" ;
+    }
+}
+
+var histservcies = new HitServcies();
+await histservcies.GetHit();
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+using Newtonsoft.Json.Linq;
+
+#!csharp
+
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
+
+public class HitServcies
+{
+
+    public string PageFinYear = "2023";
+    public  string PageAcountNumber = "55154989442";
+    public   async Task<string> GetHit()
+    {
+        HttpResponseMessage res ;
+        var client = new HttpClient();  
+        res = await client.GetAsync($"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={PageFinYear}&bankAccNo={PageAcountNumber}");
+        var rawJson = await res.Content.ReadAsStringAsync();
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            Console.WriteLine(rawJson);
+        }
+        else 
+        {
+            Console.WriteLine("Error");
+        }
+        
+        return rawJson ;
+    }
+}
+
+
+
+
+var histservcies = new HitServcies();
+string rawJson =  await histservcies.GetHit();
+JObject parsedJson = JObject.Parse(rawJson);
+
+#!csharp
+
+Console.WriteLine(parsedJson);
+
+#!csharp
+
+#r "nuget: sqlite-net-pcl"
+
+using SQLite;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
+public class Payments
+{
+    [PrimaryKey, AutoIncrement]
+    public int IDs { get; set; }
+    public string BillID { get; set; }
+    public string BillType { get; set; }
+    public string DDOCode { get; set; }
+    public string GrossAmount { get; set; }
+    public string NetAmount { get; set; }
+    public string PaidOn { get; set; }
+    public string Payed_Month { get; set; }
+    public string Sortable_Date { get; set; }
+    public string PayeeCode { get; set; }
+    public string Remarks { get; set; }
+    public string Treasury { get; set; }
+    public string DataRefreshDate { get; set; }
+    public string DataRefreshTime { get; set; }
+    public string AccountNumber { get; set; }
+    public int Fin_Year { get; set; }
+    public string FreeCell1 { get; set; }
+    public string FreeCell2 { get; set; }
+    public string FreeCell3 { get; set; }
+    public string FreeCell4 { get; set; }
+    public string FreeCell5 { get; set; }
+}
+
+
+
+
+public class Database_Payments
+{
+    public static string Dbname = "eBhugtan.db";
+
+    private SQLiteConnection conn;
+    //CREATE  
+    public Database_Payments()
+    {
+        //conn = DependencyService.Get<ISQLite>().GetConnection();
+        //conn.CreateTable<Payments>();
+        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Dbname);
+        conn = new SQLiteConnection(dbPath);
+        conn.CreateTable<Payments>();
+    }
+    //READ  
+    public IEnumerable<Payments> GetPayments(String Querryhere)
+    {
+        var list = conn.Query<Payments>(Querryhere);
+        return list.ToList();
+    }
+    //INSERT  
+    public string AddPayments(Payments loginmodel)
+    {
+        conn.Insert(loginmodel);
+        return "success";
+    }
+    //DELETE  
+    public string DeletePayments()
+    {
+        var del = conn.Query<Payments>("delete from Payments");
+        return "success";
+    }
+    public string Custom(string query)
+    {
+        var del = conn.Query<Payments>(query);
+        return "success";
+    }
+}
+Database_Payments database_Payments = new Database_Payments();
+
+Console.WriteLine(database_Payments.GetPayments("select * from Payments").Count());
+
+#!csharp
+
+Database_Payments database_Payments = new Database_Payments();
+int Fin_Year = 2023;
+string AccountNumber = "55154989442";
+
+
+
+    foreach (var node in parsedJson["otherPayments"])  // node is JObject ✅
+    {
+        var item = new Payments();
+        item.DataRefreshDate = DateTime.Now.ToString("dd-MM-yyyy");
+        item.DataRefreshTime = DateTime.Now.ToString("HH:mm");
+
+        item.BillID      = node["BillID"].ToString();
+        item.BillType    = node["BillType"].ToString();
+        item.DDOCode     = node["DDOCode"].ToString();
+        item.GrossAmount = node["GrossAmount"].ToString();
+        item.NetAmount   = node["NetAmount"].ToString();
+        item.PaidOn      = node["PaidOn"].ToString();
+
+        DateTime AsofDate = DateTime.ParseExact(item.PaidOn, "dd-MM-yyyy",
+                                System.Globalization.CultureInfo.InvariantCulture);
+        item.Payed_Month   = AsofDate.ToString("MMMM, yyyy");
+        item.Sortable_Date = AsofDate.ToString("yyyy-MM-dd");
+
+        item.PayeeCode     = node["PayeeCode"].ToString();
+        item.Remarks       = node["Remarks"].ToString();
+        item.Treasury      = node["Treasury"].ToString();
+        item.AccountNumber = AccountNumber;
+        item.Fin_Year      = Fin_Year;
+
+        database_Payments.AddPayments(item);
+    }
+    Console.WriteLine("Done ✅");
+
+#!csharp
+
+Console.WriteLine(database_Payments.GetPayments("select * from Payments").Count());
+
+#!csharp
+
+Database_Payments database_Payments = new Database_Payments();
+int Fin_Year = 2023;
+string AccountNumber = "1234567890";
+
+
+// foreach (var i in parsedJson)
+// {
+//     var nodes = i.Value;
+//     Console.WriteLine(nodes);
+// }
+
+// foreach parsedJson values second vlaue is the JArray of payments
+foreach (var i in parsedJson)
+{
+    var nodes = parsedJson["otherPayments"] as JArray;  // direct access, no loop needed
+     Console.WriteLine(nodes);
+}
+// foreach (var i in parsedJson)
+// {
+//     var nodes = i.Value;
+//     var item = new Payments();
+//     item.DataRefreshDate = DateTime.Now.ToString("dd-MM-yyyy");
+//     item.DataRefreshTime = DateTime.Now.ToString("HH:mm");
+//     foreach(var ii in  nodes)
+//     {
+//         item.BillID = ii["BillID"].ToString();
+//         item.BillType = ii["BillType"].ToString();
+//         item.DDOCode = ii["DDOCode"].ToString();
+//         item.GrossAmount = ii["GrossAmount"].ToString();
+//         item.NetAmount = ii["NetAmount"].ToString();
+//         item.PaidOn = ii["PaidOn"].ToString();
+//         DateTime AsofDate = DateTime.ParseExact(item.PaidOn, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+//         item.Payed_Month = AsofDate.ToString("MMMM, yyyy");
+//         item.Sortable_Date = AsofDate.ToString("yyyy-MM-dd");
+//         item.PayeeCode = ii["PayeeCode"].ToString();
+//         item.Remarks = ii["Remarks"].ToString();
+//         item.Treasury = ii["Treasury"].ToString();
+//         item.AccountNumber = AccountNumber;
+//         item.Fin_Year = Fin_Year;
+//         database_Payments.AddPayments(item);
+//     }
+    
+// }

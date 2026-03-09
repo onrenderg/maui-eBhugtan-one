@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="eBhugtan.LoginPage" xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" >
+    <NavigationPage.TitleView >
+        <StackLayout x:Name="Custom_Navigation" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" >
+            <Image Source="Hpgov.png" VerticalOptions="CenterAndExpand"/>
+            <Label Text="e-भुगतान ,HP" TextColor="#05083B" FontSize="19" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Center"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <Grid>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout Margin="9">
+                    <Frame CornerRadius="75" Padding="0" Margin="8" WidthRequest="150" HeightRequest="150" HorizontalOptions="Center" VerticalOptions="Start" BorderColor="DeepSkyBlue">
+                        <Image Source="Bhugtan_ico" Margin="1"/>
+                    </Frame>
+                    <Entry x:Name="AcNo" Placeholder="Enter Account Number" IsTextPredictionEnabled="False"/>
+                    <Entry x:Name="Username" Placeholder="First 3 Letters of Name" IsPassword="False" IsTextPredictionEnabled="False" MaxLength="3"/>
+                    <Picker x:Name="Picker_FinYear" Title="Choose Financial year" HorizontalOptions="Start"/>
+                    <Frame Padding="0" HasShadow = "False" Margin="80,8,80,0">
+                        <StackLayout Orientation="Horizontal" BackgroundColor="DeepSkyBlue" HorizontalOptions="FillAndExpand"  >
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="LoginBtn"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="Signin" HeightRequest="30" Margin="9" HorizontalOptions="End"/>
+                        <Label Text="Submit" HorizontalOptions="CenterAndExpand" TextColor="White" VerticalTextAlignment="Center" FontSize="Large" FontAttributes="Bold"/>
+                    </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </ScrollView>
+            <StackLayout VerticalOptions="FillAndExpand"></StackLayout>
+            <Label Text="© National Informatics Centre, Himachal Pradesh. Centre of Competence for Mobile Application Development" TextColor="White" BackgroundColor="#0D4C88" HorizontalTextAlignment="Center" VerticalOptions="End" />
+        </StackLayout>
+        <RelativeLayout x:Name="activity1" IsVisible="false"  Opacity="0.9" BackgroundColor="Transparent"> 
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-100, Factor=0.5}"  RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.4}"> 
+                <Frame BackgroundColor="#f2f2f2">
+                <StackLayout Orientation="Horizontal" Margin="6" >
+                <ActivityIndicator IsVisible="true" IsRunning="true" Margin="5"/> 
+                <Label Text="Please Wait ..." TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                </Frame>
+            </StackLayout>
+        </RelativeLayout>
+    </Grid>
+</ContentPage>

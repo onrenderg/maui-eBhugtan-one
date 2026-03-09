@@ -1,0 +1,235 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+using System.Net.Http;
+
+public class HitServcies
+{
+
+    public string PageFinYear = "2025";
+    public  string PageAcountNumber = "55069411800";
+    public   async Task<string> GetHit()
+    {
+        HttpResponseMessage res ;
+        var client = new HttpClient();  
+        var url = $"https://himkosh.nic.in/ehpoltis/wcfServices/OtherPayment.svc/GetPayeeOtherPayments?payeeCode=IP99-99999&paymentMonth=&paymentYear={PageFinYear}&bankAccNo={PageAcountNumber}";
+        Console.WriteLine(url);
+        res = await client.GetAsync(url);
+        Console.WriteLine(res);
+        var rawJson = await res.Content.ReadAsStringAsync();
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            // Console.WriteLine(rawJson);  
+            return rawJson;
+        }
+        else 
+        {
+            Console.WriteLine("Error");
+        }
+        
+        return "" ;
+    }
+}
+
+var histservcies = new HitServcies();
+string rawJson = await histservcies.GetHit();
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+using Newtonsoft.Json.Linq; // This line fixes the 'JObject' error
+using Newtonsoft.Json;      // This helps with general serialization
+
+#!csharp
+
+JObject parsedJson = JObject.Parse(rawJson);
+Console.WriteLine(parsedJson);
+
+#!csharp
+
+foreach (var i in parsedJson["otherPayments"]) 
+{
+    // 2. Added the missing " at the end of every line
+    Console.WriteLine($"BillID: {i["BillID"]}");
+    Console.WriteLine($"BillType: {i["BillType"]}");
+    Console.WriteLine($"DDOCode: {i["DDOCode"]}");
+    Console.WriteLine($"NetAmount: {i["NetAmount"]}");
+    Console.WriteLine($"PaidOn: {i["PaidOn"]}");
+    Console.WriteLine($"PayeeCode: {i["PayeeCode"]}");
+    Console.WriteLine($"Remarks: {i["Remarks"]}");
+    Console.WriteLine($"Treasury: {i["Treasury"]}");
+}
+
+#!csharp
+
+#r "nuget: sqlite-net-pcl"
+
+using SQLite;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
+public class Payments
+{
+    [PrimaryKey, AutoIncrement]
+    public int IDs { get; set; }
+    public string BillID { get; set; }
+    public string BillType { get; set; }
+    public string DDOCode { get; set; }
+    public string GrossAmount { get; set; }
+    public string NetAmount { get; set; }
+    public string PaidOn { get; set; }
+    public string Payed_Month { get; set; }
+    public string Sortable_Date { get; set; }
+    public string PayeeCode { get; set; }
+    public string Remarks { get; set; }
+    public string Treasury { get; set; }
+    public string DataRefreshDate { get; set; }
+    public string DataRefreshTime { get; set; }
+    public string AccountNumber { get; set; }
+    public int Fin_Year { get; set; }
+    public string FreeCell1 { get; set; }
+    public string FreeCell2 { get; set; }
+    public string FreeCell3 { get; set; }
+    public string FreeCell4 { get; set; }
+    public string FreeCell5 { get; set; }
+}
+
+
+
+
+public class Database_Payments
+{
+    public static string Dbname = "eBhugtan.db";
+
+    private SQLiteConnection conn;
+    //CREATE  
+    public Database_Payments()
+    {
+        //conn = DependencyService.Get<ISQLite>().GetConnection();
+        //conn.CreateTable<Payments>();
+        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Dbname);
+        conn = new SQLiteConnection(dbPath);
+        conn.CreateTable<Payments>();
+    }
+    //READ  
+    public IEnumerable<Payments> GetPayments(String Querryhere)
+    {
+        var list = conn.Query<Payments>(Querryhere);
+        return list.ToList();
+    }
+    //INSERT  
+    public string AddPayments(Payments loginmodel)
+    {
+        conn.Insert(loginmodel);
+        return "success";
+    }
+    //DELETE  
+    public string DeletePayments()
+    {
+        var del = conn.Query<Payments>("delete from Payments");
+        return "success";
+    }
+    public string Custom(string query)
+    {
+        var del = conn.Query<Payments>(query);
+        return "success";
+    }
+}
+Database_Payments database_Payments = new Database_Payments();
+
+Console.WriteLine(database_Payments.GetPayments("select * from Payments").Count());
+
+#!csharp
+
+Database_Payments database_Payments = new Database_Payments();
+int Fin_Year = 2023;
+string AccountNumber = "55154989442";
+
+#!csharp
+
+foreach (var node in parsedJson["otherPayments"])  // node is JObject ✅
+{
+    var item = new Payments();
+    item.DataRefreshDate = DateTime.Now.ToString("dd-MM-yyyy");
+    item.DataRefreshTime = DateTime.Now.ToString("HH:mm");
+
+    item.BillID      = node["BillID"].ToString();
+    item.BillType    = node["BillType"].ToString();
+    item.DDOCode     = node["DDOCode"].ToString();
+    item.GrossAmount = node["GrossAmount"].ToString();
+    item.NetAmount   = node["NetAmount"].ToString();
+    item.PaidOn      = node["PaidOn"].ToString();
+
+    DateTime AsofDate = DateTime.ParseExact(item.PaidOn, "dd-MM-yyyy",
+                            System.Globalization.CultureInfo.InvariantCulture);
+    item.Payed_Month   = AsofDate.ToString("MMMM, yyyy");
+    item.Sortable_Date = AsofDate.ToString("yyyy-MM-dd");
+
+    item.PayeeCode     = node["PayeeCode"].ToString();
+    item.Remarks       = node["Remarks"].ToString();
+    item.Treasury      = node["Treasury"].ToString();
+    item.AccountNumber = AccountNumber;
+    item.Fin_Year      = Fin_Year;
+
+    database_Payments.AddPayments(item);
+}
+Console.WriteLine("Done ✅");
+
+#!csharp
+
+Console.WriteLine(database_Payments.GetPayments("select * from Payments").Count());
+
+#!csharp
+
+// 1. Define your Class FIRST (Outside of the logic)
+public class PaymentResponse 
+{
+    [JsonPropertyName("PayeeCode")]
+    public string PayeeCode { get; set; }
+
+    [JsonPropertyName("NetAmount")] 
+    public string Amount { get; set; }
+
+    [JsonPropertyName("BillID")]
+    public string BillID { get; set; }
+}
+
+using System.Text.Json;
+
+// Inside your method:
+var data = JsonSerializer.Deserialize<PaymentResponse>(rawJson);
+Console.WriteLine(data.Amount); // Now you can access properties!
+
+#!csharp
+
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+
+// 1. Get your raw JSON from the API
+string rawJson = await histservcies.GetHit();
+
+if (!string.IsNullOrEmpty(rawJson))
+{
+    // 2. Use JObject to "jump" straight to the list without a wrapper class
+    var details = JObject.Parse(rawJson);
+    var token = details.SelectToken("otherPayments");
+
+    // 3. Convert the JSON list directly into your SQLite 'Payments' model list
+    List<Payments> apiPayments = token.ToObject<List<Payments>>();
+
+    // 4. Save them to your Database
+    foreach (var p in apiPayments)
+    {
+        // You can set extra fields not in the API here
+        p.AccountNumber = histservcies.PageAcountNumber;
+        p.Fin_Year = int.Parse(histservcies.PageFinYear);
+        
+        database_Payments.AddPayments(p);
+    }
+}

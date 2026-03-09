@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="eBhugtanClient.MonthWisePage"
+    Title="Monthly">
+    <Grid RowDefinitions="Auto, *">
+        <!-- Top selection area -->
+        <Border Grid.Row="0" Margin="10" Padding="10" StrokeShape="RoundRectangle 10"
+            BackgroundColor="AliceBlue">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Showing data for:" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label x:Name="AccountLabel" FontSize="16" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Data List -->
+        <ListView Grid.Row="1" x:Name="PaymentsListView" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Border Margin="10,5" Padding="15" StrokeShape="RoundRectangle 10">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding BillType}" FontAttributes="Bold"
+                                        FontSize="16" />
+                                    <Label Text="{Binding DDOCode}" FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding PaidOn}" FontSize="12" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1"
+                                    Text="{Binding NetAmount, StringFormat='₹ {0}'}"
+                                    VerticalOptions="Center"
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    TextColor="Green" />
+                            </Grid>
+                        </Border>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>
