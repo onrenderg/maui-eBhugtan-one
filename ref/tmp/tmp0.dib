@@ -1,0 +1,172 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+
+#!csharp
+
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json; // Use for JSON handling
+
+public class HimkoshEncryptor
+{
+    private const string EncryptionKey = "Himkosh2015BillServiceAESEncryptDecrypt";
+    private static readonly byte[] Salt = new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 };
+    private const int KeySize = 32; // 256 bits
+    private const int IvSize = 16;  // 128 bits
+
+    public string Encrypt(string plainText)
+    {
+        byte[] clearBytes = Encoding.ASCII.GetBytes(plainText);
+        
+        using (Aes encryptor = Aes.Create())
+        {
+            // Replicates PBKDF2 / Rfc2898DeriveBytes
+            using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, Salt, 1000))
+            {
+                encryptor.Key = pdb.GetBytes(KeySize);
+                encryptor.IV = pdb.GetBytes(IvSize);
+                encryptor.Mode = CipherMode.CBC;
+                encryptor.Padding = PaddingMode.PKCS7;
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(clearBytes, 0, clearBytes.Length);
+                }
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+    }
+
+    public string Decrypt(string cipherText)
+    {
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);
+        
+        using (Aes encryptor = Aes.Create())
+        {
+            using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, Salt, 1000))
+            {
+                encryptor.Key = pdb.GetBytes(KeySize);
+                encryptor.IV = pdb.GetBytes(IvSize);
+                encryptor.Mode = CipherMode.CBC;
+                encryptor.Padding = PaddingMode.PKCS7;
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(cipherBytes, 0, cipherBytes.Length);
+                }
+                return Encoding.ASCII.GetString(ms.ToArray());
+            }
+        }
+    }
+}
+
+#!csharp
+
+// --- Usage Example ---
+
+var data = new {
+    UserName = "eBhugtan",
+    Password = "Himkosh@2025",
+    FinYear = "2022",
+    AccountNo = "510101004723871",
+    PayeeName = "bsn"
+};
+
+string jsonString = JsonConvert.SerializeObject(data, Formatting.None);
+var encryptor = new HimkoshEncryptor();
+string encrypted = encryptor.Encrypt(jsonString);
+Console.WriteLine(encrypted);
+
+#!csharp
+
+// --- Usage Example ---
+
+var data = new {
+    UserName = "eBhugtan",
+    Password = "Himkosh@2025",
+    FinYear = "2019",
+    AccountNo = "55069411800",
+    PayeeName = "san"
+};
+
+string jsonString = JsonConvert.SerializeObject(data, Formatting.None);
+var encryptor = new HimkoshEncryptor();
+string encrypted = encryptor.Encrypt(jsonString);
+Console.WriteLine(encrypted);
+
+#!csharp
+
+// --- Usage Example ---
+
+var data = new {
+    UserName = "eBhugtan",
+    Password = "Himkosh@2025",
+    FinYear = "2021",
+    AccountNo = "55154989442",
+    PayeeName = "pra"
+};
+
+string jsonString = JsonConvert.SerializeObject(data, Formatting.None);
+var encryptor = new HimkoshEncryptor();
+string encrypted = encryptor.Encrypt(jsonString);
+Console.WriteLine(encrypted);
+
+#!csharp
+
+using Newtonsoft.Json.Linq;
+
+string encryptedRes = "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";
+var encryptor = new HimkoshEncryptor();
+string encrypted = encryptor.Decrypt(encryptedRes);
+// Console.WriteLine(encrypted);
+// var parsed = JObject.Parse(encrypted);
+// Change this:
+// var parsed = JObject.Parse(encrypted);
+
+// 1. Parse as a JArray (the C# equivalent of a List)
+JArray list = JArray.Parse(encrypted);
+
+// 2. Iterate through each JObject (the C# equivalent of a Dictionary)
+foreach (JObject item in list)
+{
+
+    
+    Console.WriteLine($"Processing: {item}");
+}
+
+#!csharp
+
+ var client = new HttpClient();
+string jsonData = JsonConvert.SerializeObject(new
+{
+    Appcode = AES256Cryptographywithsalt.EncryptAES("1"),
+    UserID = AES256Cryptographywithsalt.EncryptAES(UserID),
+    pwd = AES256Cryptographywithsalt.EncryptAES(pwd),
+    restoken = AES256Cryptographywithsalt.EncryptAES(senddate),
+});
+
+StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+HttpResponseMessage response = await client.PostAsync(baseurl + "api/UserLogin", content);
+
+
+if ((int)response.StatusCode == 200)
+{
+    var result = await response.Content.ReadAsStringAsync();
+                
+    string decryptrsult= Aesdecrypt(result )
+
+    var parsed = JObject.Parse(result);
+}
