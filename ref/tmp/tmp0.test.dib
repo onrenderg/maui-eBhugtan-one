@@ -1,0 +1,98 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+#r "nuget: Newtonsoft.Json"
+
+#!csharp
+
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json; // Use for JSON handling
+
+public class HimkoshEncryptor
+{
+    private const string EncryptionKey = "Himkosh2015BillServiceAESEncryptDecrypt";
+    private static readonly byte[] Salt = new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 };
+    private const int KeySize = 32; // 256 bits
+    private const int IvSize = 16;  // 128 bits
+
+    public string Encrypt(string plainText)
+    {
+        byte[] clearBytes = Encoding.ASCII.GetBytes(plainText);
+        
+        using (Aes encryptor = Aes.Create())
+        {
+            // Replicates PBKDF2 / Rfc2898DeriveBytes
+            using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, Salt, 1000))
+            {
+                encryptor.Key = pdb.GetBytes(KeySize);
+                encryptor.IV = pdb.GetBytes(IvSize);
+                encryptor.Mode = CipherMode.CBC;
+                encryptor.Padding = PaddingMode.PKCS7;
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(clearBytes, 0, clearBytes.Length);
+                }
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+    }
+
+    public string Decrypt(string cipherText)
+    {
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);
+        
+        using (Aes encryptor = Aes.Create())
+        {
+            using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, Salt, 1000))
+            {
+                encryptor.Key = pdb.GetBytes(KeySize);
+                encryptor.IV = pdb.GetBytes(IvSize);
+                encryptor.Mode = CipherMode.CBC;
+                encryptor.Padding = PaddingMode.PKCS7;
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(cipherBytes, 0, cipherBytes.Length);
+                }
+                return Encoding.ASCII.GetString(ms.ToArray());
+            }
+        }
+    }
+}
+
+#!csharp
+
+// --- Usage Example ---
+
+var data = new {
+    UserName = "eBhugtan",
+    Password = "Himkosh@2025",
+    FinYear = "2019",
+    AccountNo = "55069411800",
+    PayeeName = "san"
+};
+
+
+string jsonString = JsonConvert.SerializeObject(data, Formatting.None);
+var encryptor = new HimkoshEncryptor();
+string encrypted = encryptor.Encrypt(jsonString);
+Console.WriteLine(encrypted);
+
+#!csharp
+
+string rawJson = "xqxlyQebAApT/i+fDVris2XTBPOLAKkhV6kErLamx/R6nNI1o2MIleVks/23pY/WYvPuvaNjoKWe9KEjm60cUNLDy2V4XBTltG5RHHtFnV9pnMlAVSCmQxyMsWNHGsvfJvdqDQ5GtwbbwzYNHUMqxEFkeSnHGLsMaSYLFaq3oCP84oSfSRXMPQDA5/WJER3tGVkm6CtJ7NbKoM0+DjKaIdH2Lt8TAjUa81heHxXExSWExqG9lB3dwuVpI/3iaRI2kpcbmCQArgx/LlvRH6HDZBDtCIdTLTj/UmInPPvBaFd2y6seehjbeo7BwmVKIHSHdVMEgU6y1QR+vhoW/PwC6bz4uRkZFU6LVykA94xFe+4DxaxHJvXbVv7QPOdmX67+zz19piw4rf5X4oBxfgWq+cHtwJvEXFMbsKoAkWaG/sZYBIY9qr9kRkUh7kr0tIWo7MAD9HyUhnn8K7OMwxKk/IGMnY/VKqiB5ZMpP78M3i/XahkJqPYJXErmBYpvzd/Qb1O8zTlOaOMtKAY70Y7geq518UKq0izIokXR/EKVoCM3KKZ0dCwVVEUHJ9S2ZhTAUg5arOOxuGo0pq //iDDv73UY7OPa/jORwmz3yAhcNUUvKeq/zr1S5g94UupGXT2gS96708b/aN79V16cmpkp0CV2bgXHld2iKsHIDFBxEWvc4lsSbdGAhuXtTJzlOSPkyTh4NabR1eSoZC5vULKSRF430NAb/fASIISilwDDO4lKRebWl78jqMJz15rquLZD2fjokL/Fz83XdzFDTMLf42jihad1OYBuzAThBZGeZmZ6f6k/gwxw8r7QoYEdN4B2bh540/WY0DJyxEIyMsNS+6q0PXEhbikqN/TZJSUmZPiK3JmT+nq7jQhS4PUoAE29TlUoBIFxmQ3+TDoMImihV81CrmaVuaVITS13s4xiURi2NFGiVUkmgv/dA2hXTM5rFCGT1X71JSROQ1baqNDgK6N+GMoCNRsnTrOKMGvYDaxA3awh46Zakuh154YkaVhpUNVHpADpGNGPwFmsaP00TCCcSenVdoJe5c3Q3Cq6NWVHqdKSSzAD/Lztg5Cw7XVqaGBbWoFnuuQr1P4eSAArFdl4rTegwoG0cAptfsxq1yIn9NLrd8EjZJXZ6dt9Fh2msvDQVIOHrHZ95L3Y73d2WVUNMEsvQ+c3xUuoNYDTFV0=";
+string encrypted = encryptor.Decrypt(rawJson);
+Console.WriteLine(encrypted);
