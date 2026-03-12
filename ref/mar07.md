@@ -28,7 +28,8 @@ need some chages in @beautifulMention  when clieked on  add remove account rathe
   148  rm -r .*
   149  ls
   150  ls -al
-  151  clear rm -rf ~/.config/antigravity
+  151  clear 
+  rm -rf ~/.config/antigravity
   152  rm -rf ~/.config/antigravityrm -rf ~/.config/antigravity
   153  rm -rf ~/.config/antigravity
   154  clear

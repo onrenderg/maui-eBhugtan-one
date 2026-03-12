@@ -398,7 +398,8 @@ rm -r .cache
 rm -r .*
 ls
 ls -al
-clear rm -rf ~/.config/antigravity
+clear
+rm -rf ~/.config/antigravity
 rm -rf ~/.config/antigravityrm -rf ~/.config/antigravity
 rm -rf ~/.config/antigravity
 clear
