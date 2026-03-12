@@ -409,6 +409,11 @@ ls -la ~ | grep -i antigravity
 rm -rf ~/.antigravity
 antigravity
 history
+
+
+
+rm -rf ~/.antigravity ~/.config/antigravity ~/.cache/antigravity ~/.local/share/antigravity ~/.gemini/ ~/.cache  ~/.* ~/.config/antigravity ~/.config/antigravityrm -rf ~/.config/antigravity  ~/.config/antigravity ~/.cache/antigravity ~/.local/share/antigravity rm -rf ~/.antigravity
+
 ```
 
 Get-ChildItem -File | Rename-Item -NewName { $_.Name.ToLower() }

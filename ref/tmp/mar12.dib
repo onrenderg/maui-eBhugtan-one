@@ -1,0 +1,80 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!csharp
+
+public static System.Collections.IList YearsList;
+YearsList = new List<string>();
+var year = DateTime.Now.AddDays(-84).Year;
+for (int i = year; i >= 2016; i--)
+{
+    YearsList.Add(i.ToString());
+}
+YearsList
+
+#!csharp
+
+public static System.Collections.IList YearsList;
+
+YearsList = new List<string>();
+
+DateTime testDate = new DateTime(2026, 3, 26); // simulate 1 Apr 2026
+var year = testDate.AddDays(-84).Year;
+
+for (int i = year; i >= 2016; i--)
+{
+    YearsList.Add(i.ToString());
+}
+YearsList
+
+#!csharp
+
+DateTime today = DateTime.Now;
+int year = (today.Month <= 3) ? today.Year - 1 : today.Year;
+year
+
+#!csharp
+
+public static System.Collections.IList YearsList;
+
+YearsList = new List<string>();
+
+DateTime today = DateTime.Now;
+// DateTime today = new DateTime(2026, 4, 1); 
+int year = (today.Month <= 3) ? today.Year - 1 : today.Year;
+
+for (int i = year; i >= 2016; i--)
+{
+    YearsList.Add(i.ToString());
+}
+YearsList
+
+#!csharp
+
+DateTime today = new DateTime(2026, 4, 1); // 1 Apr 2026
+
+int year = (today.Month <= 3) ? today.Year - 1 : today.Year;
+
+Console.WriteLine(year);
+// DateTime today = new DateTime(2026, 4, 1); 
+
+#!csharp
+
+public static System.Collections.IList YearsList;
+
+YearsList = new List<string>();
+
+// DateTime today = DateTime.Now;
+DateTime today = new DateTime(2026, 4, 1); 
+int year = (today.Month <= 3) ? today.Year - 1 : today.Year;
+
+for (int i = year; i >= 2016; i--)
+{
+    YearsList.Add(i.ToString());
+}
+YearsList
+
+#!csharp
+
+Console.WriteLine(DateTime.Now.Year-1);
